@@ -7,7 +7,7 @@
     <title>Группа - Электронный дневник</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* Дополнительные стили для Excel */
+        /* Контейнер для Excel */
         .excel-container {
             margin-top: 60px;
             height: calc(100vh - 60px);
@@ -15,8 +15,38 @@
             flex-direction: column;
         }
 
-        /* Панель с вкладками */
-        .tabs-panel {
+        /* Панель с основными вкладками */
+        .main-tabs-panel {
+            height: 45px;
+            background: #4a76a8;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 20px;
+        }
+
+        .main-tab {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            font-size: 15px;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .main-tab:hover {
+            color: white;
+        }
+
+        .main-tab.active {
+            color: white;
+            border-bottom-color: white;
+        }
+
+        /* Панель с листами */
+        .sheets-panel {
             height: 40px;
             background: #f0f0f0;
             border-bottom: 1px solid #d0d0d0;
@@ -24,6 +54,13 @@
             align-items: flex-end;
             padding: 0 10px;
             gap: 2px;
+            justify-content: space-between;
+        }
+
+        .sheets-left {
+            display: flex;
+            gap: 2px;
+            flex: 1;
         }
 
         .sheet-tab {
@@ -35,6 +72,10 @@
             cursor: pointer;
             font-size: 14px;
             color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
         }
 
         .sheet-tab:hover {
@@ -45,6 +86,28 @@
             background: white;
             color: #217346;
             font-weight: 500;
+        }
+
+        .sheet-close {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: transparent;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 12px;
+            display: none;
+            line-height: 1;
+        }
+
+        .sheet-tab:hover .sheet-close {
+            display: block;
+        }
+
+        .sheet-close:hover {
+            background: #ccc;
+            color: #333;
         }
 
         .add-tab-btn {
@@ -60,44 +123,216 @@
             color: #217346;
         }
 
-        /* Область таблицы */
-        .table-area {
-            flex: 1;
-            background: white;
-            overflow: auto;
+        /* Переключатель недель */
+        .week-switcher {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 10px;
         }
 
-        .excel-table {
+        .week-switcher.hidden {
+            display: none;
+        }
+
+        .week-radio {
+            display: none;
+        }
+
+        .week-label {
+            padding: 6px 15px;
+            background: #e0e0e0;
+            border: 1px solid #d0d0d0;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .week-label:first-of-type {
+            border-radius: 4px 0 0 0;
+        }
+
+        .week-label:last-of-type {
+            border-radius: 0 4px 0 0;
+        }
+
+        .week-radio:checked+.week-label {
+            background: #217346;
+            color: white;
+            border-color: #217346;
+        }
+
+        /* Область таблиц */
+        .tables-container {
+            flex: 1;
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .table-area {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: auto;
+            display: none;
+        }
+
+        .table-area.active {
+            display: block;
+        }
+
+        /* Таблица оценок */
+        .grades-table {
             border-collapse: collapse;
             width: 100%;
         }
 
-        .excel-table th,
-        .excel-table td {
+        .grades-table th,
+        .grades-table td {
             border: 1px solid #d0d0d0;
             padding: 8px;
             text-align: center;
         }
 
-        .excel-table th {
+        .grades-table th {
             background: #f5f5f5;
             font-weight: 500;
         }
 
-        .excel-table td {
-            background: white;
-        }
-
-        .excel-table td input {
+        .grades-table td input {
             width: 100%;
             border: none;
             padding: 4px;
             background: transparent;
+            text-align: center;
         }
 
-        .excel-table td input:focus {
+        .grades-table td input:focus {
             outline: 2px solid #217346;
             background: white;
+        }
+
+        /* Таблица расписания */
+        .schedule-wrapper {
+            padding: 20px;
+        }
+
+        .schedule-table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .schedule-table th,
+        .schedule-table td {
+            border: 1px solid #d0d0d0;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .schedule-table th {
+            background: #f8f8f8;
+            font-weight: 500;
+        }
+
+        .schedule-table th.time-header {
+            background: #4a76a8;
+            color: white;
+            width: 130px;
+        }
+
+        .schedule-table th.day-header {
+            background: #e8f0fe;
+            color: #4a76a8;
+            font-size: 16px;
+            padding: 12px;
+        }
+
+        .schedule-table td.time-cell {
+            background: #f5f5f5;
+            padding: 4px;
+        }
+
+        .time-input {
+            width: 100%;
+            border: none;
+            padding: 4px;
+            background: transparent;
+            text-align: center;
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        .time-input:focus {
+            outline: 2px solid #4a76a8;
+            background: white;
+        }
+
+        .schedule-table td textarea {
+            width: 100%;
+            border: none;
+            padding: 6px;
+            background: transparent;
+            min-height: 60px;
+            resize: none;
+            font-family: inherit;
+        }
+
+        .schedule-table td textarea:focus {
+            outline: 2px solid #4a76a8;
+            background: #f0f7ff;
+        }
+
+        /* Кнопки управления строками */
+        .row-controls {
+            text-align: center;
+            padding: 10px;
+            background: #f0f0f0;
+        }
+
+        .btn-add-row {
+            padding: 6px 15px;
+            background: #217346;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .btn-add-row:hover {
+            background: #1a5c37;
+        }
+
+        .btn-remove-row {
+            width: 20px;
+            height: 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 12px;
+            line-height: 1;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .schedule-table tr:hover .btn-remove-row {
+            opacity: 1;
+        }
+
+        /* Разные недели */
+        .week-content {
+            display: none;
+        }
+
+        .week-content.active {
+            display: block;
         }
     </style>
 </head>
@@ -170,126 +405,365 @@
 
     <!-- Excel контейнер -->
     <div class="excel-container">
-        <!-- Панель с вкладками -->
-        <div class="tabs-panel">
-            <div class="sheet-tab active">Основная</div>
-            <button class="add-tab-btn">+</button>
+        <!-- Основные вкладки -->
+        <div class="main-tabs-panel">
+            <button class="main-tab active" data-type="grades">Оценки</button>
+            <button class="main-tab" data-type="schedule">Расписание</button>
         </div>
 
-        <!-- Область таблицы -->
-        <div class="table-area">
-            <table class="excel-table">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>A</th>
-                        <th>B</th>
-                        <th>C</th>
-                        <th>D</th>
-                        <th>E</th>
-                        <th>F</th>
-                        <th>G</th>
-                        <th>H</th>
-                        <th>I</th>
-                        <th>J</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th>1</th>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                    </tr>
-                    <tr>
-                        <th>2</th>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                    </tr>
-                    <tr>
-                        <th>3</th>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                    </tr>
-                    <tr>
-                        <th>4</th>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                    </tr>
-                    <tr>
-                        <th>5</th>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                        <td><input type="text"></td>
-                    </tr>
-                </tbody>
-            </table>
+        <!-- Панель с листами -->
+        <div class="sheets-panel" id="sheetsPanel">
+            <div class="sheets-left">
+                <div class="sheet-tab active" data-sheet="0">
+                    <span>Основная</span>
+                    <button class="sheet-close">×</button>
+                </div>
+                <button class="add-tab-btn">+</button>
+            </div>
+
+            <!-- Переключатель недель (скрыт для оценок) -->
+            <div class="week-switcher hidden" id="weekSwitcher">
+                <input type="radio" name="week" id="weekTop" class="week-radio" checked>
+                <label for="weekTop" class="week-label">Верхняя неделя</label>
+                <input type="radio" name="week" id="weekBottom" class="week-radio">
+                <label for="weekBottom" class="week-label">Нижняя неделя</label>
+            </div>
+        </div>
+
+        <!-- Контейнер для таблиц -->
+        <div class="tables-container">
+            <!-- Таблица оценок -->
+            <div class="table-area active" data-type="grades">
+                <table class="grades-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 40px;"></th>
+                            <th>A</th>
+                            <th>B</th>
+                            <th>C</th>
+                            <th>D</th>
+                            <th>E</th>
+                            <th>F</th>
+                            <th>G</th>
+                            <th>H</th>
+                            <th>I</th>
+                            <th>J</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>1</th>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                        </tr>
+                        <tr>
+                            <th>2</th>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                        </tr>
+                        <tr>
+                            <th>3</th>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Таблица расписания -->
+            <div class="table-area" data-type="schedule">
+                <div class="schedule-wrapper">
+                    <!-- Верхняя неделя -->
+                    <div class="week-content active" id="topWeek">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th class="time-header">Время</th>
+                                    <th class="day-header">Понедельник</th>
+                                    <th class="day-header">Вторник</th>
+                                    <th class="day-header">Среда</th>
+                                    <th class="day-header">Четверг</th>
+                                    <th class="day-header">Пятница</th>
+                                    <th class="day-header">Суббота</th>
+                                    <th style="width: 30px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="topWeekBody">
+                                <tr>
+                                    <td class="time-cell"><input type="text" class="time-input" value="8:00 - 9:30">
+                                    </td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><button class="btn-remove-row" onclick="removeRow(this)">×</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell"><input type="text" class="time-input" value="9:40 - 11:10">
+                                    </td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><button class="btn-remove-row" onclick="removeRow(this)">×</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell"><input type="text" class="time-input" value="11:20 - 12:50">
+                                    </td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><button class="btn-remove-row" onclick="removeRow(this)">×</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell"><input type="text" class="time-input" value="13:00 - 14:30">
+                                    </td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><button class="btn-remove-row" onclick="removeRow(this)">×</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="row-controls">
+                            <button class="btn-add-row" onclick="addRow('topWeekBody')">+ Добавить пару</button>
+                        </div>
+                    </div>
+
+                    <!-- Нижняя неделя -->
+                    <div class="week-content" id="bottomWeek">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th class="time-header">Время</th>
+                                    <th class="day-header">Понедельник</th>
+                                    <th class="day-header">Вторник</th>
+                                    <th class="day-header">Среда</th>
+                                    <th class="day-header">Четверг</th>
+                                    <th class="day-header">Пятница</th>
+                                    <th class="day-header">Суббота</th>
+                                    <th style="width: 30px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="bottomWeekBody">
+                                <tr>
+                                    <td class="time-cell"><input type="text" class="time-input" value="8:00 - 9:30">
+                                    </td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><button class="btn-remove-row" onclick="removeRow(this)">×</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell"><input type="text" class="time-input" value="9:40 - 11:10">
+                                    </td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><button class="btn-remove-row" onclick="removeRow(this)">×</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell"><input type="text" class="time-input" value="11:20 - 12:50">
+                                    </td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><button class="btn-remove-row" onclick="removeRow(this)">×</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell"><input type="text" class="time-input" value="13:00 - 14:30">
+                                    </td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><textarea placeholder="Предмет"></textarea></td>
+                                    <td><button class="btn-remove-row" onclick="removeRow(this)">×</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="row-controls">
+                            <button class="btn-add-row" onclick="addRow('bottomWeekBody')">+ Добавить пару</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Простой функционал для вкладок
-        document.querySelector('.add-tab-btn').addEventListener('click', function () {
-            const tabsPanel = document.querySelector('.tabs-panel');
-            const newTab = document.createElement('div');
-            newTab.className = 'sheet-tab';
-            newTab.textContent = 'Лист ' + (document.querySelectorAll('.sheet-tab').length + 1);
-            tabsPanel.insertBefore(newTab, this);
+        let sheetCounter = 1;
 
-            // Обработчик клика для новой вкладки
-            newTab.addEventListener('click', function () {
-                document.querySelectorAll('.sheet-tab').forEach(t => t.classList.remove('active'));
+        // Функции для работы с расписанием
+        function addRow(tableId) {
+            const tbody = document.getElementById(tableId);
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td class="time-cell"><input type="text" class="time-input" placeholder="00:00 - 00:00"></td>
+                <td><textarea placeholder="Предмет"></textarea></td>
+                <td><textarea placeholder="Предмет"></textarea></td>
+                <td><textarea placeholder="Предмет"></textarea></td>
+                <td><textarea placeholder="Предмет"></textarea></td>
+                <td><textarea placeholder="Предмет"></textarea></td>
+                <td><textarea placeholder="Предмет"></textarea></td>
+                <td><button class="btn-remove-row" onclick="removeRow(this)">×</button></td>
+            `;
+            tbody.appendChild(newRow);
+        }
+
+        function removeRow(btn) {
+            const row = btn.closest('tr');
+            const tbody = row.parentElement;
+            if (tbody.children.length > 1) {
+                row.remove();
+            } else {
+                alert('Должна остаться хотя бы одна пара');
+            }
+        }
+
+        // Переключение основных вкладок (Оценки/Расписание)
+        document.querySelectorAll('.main-tab').forEach(tab => {
+            tab.addEventListener('click', function () {
+                // Активируем вкладку
+                document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
                 this.classList.add('active');
+
+                // Показываем соответствующую таблицу
+                const type = this.dataset.type;
+                document.querySelectorAll('.table-area').forEach(area => {
+                    area.classList.remove('active');
+                    if (area.dataset.type === type) {
+                        area.classList.add('active');
+                    }
+                });
+
+                // Показываем/скрываем переключатель недель
+                const weekSwitcher = document.getElementById('weekSwitcher');
+                if (type === 'schedule') {
+                    weekSwitcher.classList.remove('hidden');
+                } else {
+                    weekSwitcher.classList.add('hidden');
+                }
             });
         });
 
-        // Переключение вкладок
-        document.addEventListener('click', function (e) {
-            if (e.target.classList.contains('sheet-tab')) {
-                document.querySelectorAll('.sheet-tab').forEach(t => t.classList.remove('active'));
-                e.target.classList.add('active');
+        // Переключение недель
+        document.getElementById('weekTop').addEventListener('change', function () {
+            if (this.checked) {
+                document.getElementById('topWeek').classList.add('active');
+                document.getElementById('bottomWeek').classList.remove('active');
             }
         });
 
-        // Меню
+        document.getElementById('weekBottom').addEventListener('change', function () {
+            if (this.checked) {
+                document.getElementById('bottomWeek').classList.add('active');
+                document.getElementById('topWeek').classList.remove('active');
+            }
+        });
+
+        // Добавление нового листа
+        document.querySelector('.add-tab-btn').addEventListener('click', function () {
+            const sheetsLeft = document.querySelector('.sheets-left');
+            sheetCounter++;
+
+            const newTab = document.createElement('div');
+            newTab.className = 'sheet-tab';
+            newTab.dataset.sheet = sheetCounter;
+            newTab.innerHTML = `
+                <span>Лист ${sheetCounter}</span>
+                <button class="sheet-close">×</button>
+            `;
+
+            sheetsLeft.insertBefore(newTab, this);
+
+            // Сразу делаем новую вкладку активной
+            document.querySelectorAll('.sheet-tab').forEach(t => t.classList.remove('active'));
+            newTab.classList.add('active');
+        });
+
+        // Переключение листов
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('sheet-tab') || e.target.parentElement.classList.contains('sheet-tab')) {
+                const tab = e.target.classList.contains('sheet-tab') ? e.target : e.target.parentElement;
+
+                // Если кликнули не на кнопку закрытия
+                if (!e.target.classList.contains('sheet-close')) {
+                    document.querySelectorAll('.sheet-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                }
+            }
+        });
+
+        // Удаление листа
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('sheet-close')) {
+                e.stopPropagation();
+
+                const sheetsCount = document.querySelectorAll('.sheet-tab').length;
+                if (sheetsCount <= 1) {
+                    alert('Нельзя удалить последний лист');
+                    return;
+                }
+
+                const tab = e.target.parentElement;
+                const wasActive = tab.classList.contains('active');
+
+                // Удаляем вкладку
+                tab.remove();
+
+                // Если удалили активную вкладку, делаем активной первую
+                if (wasActive) {
+                    document.querySelector('.sheet-tab').classList.add('active');
+                }
+            }
+        });
+
+        // Боковое меню
         document.getElementById('menuBtn').addEventListener('click', function () {
             document.getElementById('sidebar').classList.add('active');
             document.getElementById('overlay').classList.add('active');
