@@ -1,0 +1,622 @@
+/* Заголовок страницы групп */
+.groups-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.groups-header h2 {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.groups-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Список групп */
+.groups-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.group-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    border: 2px solid #f0f2f5;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.group-card:hover {
+    border-color: #4a76a8;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+}
+
+.group-card-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.group-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background-color: #4a76a8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+}
+
+.group-card-info h3 {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.group-card-info p {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.group-card-stats {
+    display: flex;
+    gap: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.stat-item svg {
+    width: 16px;
+    height: 16px;
+}
+
+.groups-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+}
+
+.groups-empty svg {
+    width: 80px;
+    height: 80px;
+    color: #ddd;
+    margin-bottom: 20px;
+}
+
+.groups-empty h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* Модальные окна */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+}
+
+.modal.active .modal-content {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-header h3 {
+    font-size: 1.3rem;
+    color: #333;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    padding: 5px;
+}
+
+.modal-close:hover {
+    color: #333;
+}
+
+.modal form {
+    padding: 20px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+/* Форма */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #4a76a8;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.error-text {
+    color: #e74c3c;
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
+
+/* Кнопки */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #4a76a8;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #3a5f88;
+}
+
+.btn-secondary {
+    background-color: #f0f2f5;
+    color: #666;
+}
+
+.btn-secondary:hover {
+    background-color: #e0e2e5;
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+.btn-small {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+}
+
+/* Страница группы */
+.group-info {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.group-info h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.group-info p {
+    color: #666;
+}
+
+/* Табы */
+.group-tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eee;
+    overflow-x: auto;
+}
+
+.tab-btn {
+    padding: 12px 24px;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.tab-btn:hover {
+    color: #4a76a8;
+}
+
+.tab-btn.active {
+    color: #4a76a8;
+    border-bottom-color: #4a76a8;
+}
+
+.tab-panel {
+    display: none;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.panel-header h3 {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+/* Расписание */
+.schedule-day {
+    margin-bottom: 25px;
+}
+
+.schedule-day h4 {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.schedule-item {
+    display: flex;
+    gap: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.schedule-time {
+    font-weight: 600;
+    color: #4a76a8;
+    min-width: 120px;
+}
+
+.schedule-info {
+    flex: 1;
+}
+
+.schedule-info strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.schedule-info span {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.schedule-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.schedule-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    padding: 5px;
+}
+
+.schedule-actions button:hover {
+    color: #e74c3c;
+}
+
+.schedule-empty,
+.grades-empty,
+.members-empty {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+/* Оценки */
+.grades-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.grades-table th {
+    background: #f8f9fa;
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #555;
+}
+
+.grades-table td {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.grade-badge {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 50%;
+    font-weight: bold;
+    color: white;
+}
+
+.grade-5 {
+    background-color: #27ae60;
+}
+
+.grade-4 {
+    background-color: #3498db;
+}
+
+.grade-3 {
+    background-color: #f39c12;
+}
+
+.grade-2 {
+    background-color: #e74c3c;
+}
+
+/* Участники */
+.member-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.member-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #4a76a8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+.member-info {
+    flex: 1;
+}
+
+.member-info strong {
+    display: block;
+    color: #333;
+    margin-bottom: 3px;
+}
+
+.member-info span {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.member-role {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.role-admin {
+    background: #e8f0fe;
+    color: #4a76a8;
+}
+
+.role-member {
+    background: #f0f2f5;
+    color: #666;
+}
+
+/* Настройки */
+.setting-item {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.setting-item label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: #555;
+}
+
+.code-display {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.code-display span {
+    font-family: monospace;
+    font-size: 1.2rem;
+    background: #f8f9fa;
+    padding: 10px 20px;
+    border-radius: 6px;
+    letter-spacing: 2px;
+}
+
+.danger-zone {
+    border-top: 2px solid #e74c3c;
+    margin-top: 30px;
+    padding-top: 20px;
+}
+
+.danger-zone h4 {
+    color: #e74c3c;
+    margin-bottom: 15px;
+}
+
+.danger-zone .btn {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+/* Toast */
+.toast {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    z-index: 2000;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s ease;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.toast-success {
+    background: #27ae60;
+}
+
+.toast-error {
+    background: #e74c3c;
+}
+
+.toast-warning {
+    background: #f39c12;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .groups-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .groups-actions {
+        width: 100%;
+    }
+
+    .groups-actions .btn {
+        flex: 1;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .group-tabs {
+        flex-wrap: nowrap;
+    }
+
+    .tab-btn {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+}

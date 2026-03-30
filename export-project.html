@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Экспорт проекта</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            min-height: 100vh;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #4fc3f7;
+            margin-bottom: 30px;
+        }
+
+        .file-input {
+            margin-bottom: 20px;
+        }
+
+        .file-input input {
+            display: none;
+        }
+
+        .file-input label {
+            display: inline-block;
+            padding: 15px 30px;
+            background: #4a76a8;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .file-input label:hover {
+            background: #3a5f88;
+        }
+
+        .file-list {
+            background: #2d2d2d;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .file-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #444;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        .tabs-header {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 15px;
+            background: #2d2d2d;
+            padding: 10px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: #444;
+            color: #d4d4d4;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .tab-btn:hover {
+            background: #555;
+        }
+
+        .tab-btn.active {
+            background: #4fc3f7;
+            color: #1e1e1e;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+            background: #2d2d2d;
+            border-radius: 0 0 8px 8px;
+            padding: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-content pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Consolas', monospace;
+            font-size: 0.85rem;
+            max-height: 400px;
+            overflow-y: auto;
+            background: #1e1e1e;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .part-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .char-count {
+            background: #444;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: #4fc3f7;
+        }
+
+        .copy-part-btn {
+            padding: 10px 20px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .copy-part-btn:hover {
+            background: #219a52;
+        }
+
+        .copy-part-btn.copied {
+            background: #9b59b6;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .actions button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #219a52;
+        }
+
+        .btn-secondary {
+            background: #555;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #666;
+        }
+
+        .stats {
+            margin: 15px 0;
+            padding: 15px;
+            background: #2a4a2a;
+            border-radius: 8px;
+            border-left: 4px solid #27ae60;
+        }
+
+        .stats strong {
+            color: #4fc3f7;
+        }
+
+        .limit-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .limit-input input {
+            padding: 8px 12px;
+            background: #444;
+            border: 1px solid #555;
+            color: #d4d4d4;
+            border-radius: 5px;
+            width: 100px;
+        }
+
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #3d3d3d;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* Скрытое поле для копирования */
+        #hiddenTextarea {
+            position: fixed;
+            left: -9999px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>📦 Экспорт проекта для нейросети</h1>
+
+        <div class="limit-input">
+            <label>Макс. символов на часть:</label>
+            <input type="number" id="charLimit" value="4000" min="1000" max="50000">
+            <span style="color: #888; font-size: 0.85rem;">(рекомендуется 3500-4000)</span>
+        </div>
+
+        <div class="file-input">
+            <input type="file" id="fileInput" multiple webkitdirectory>
+            <label for="fileInput">📁 Выбрать папку проекта</label>
+        </div>
+
+        <div class="file-list" id="fileList">
+            <p style="color: #888;">Выберите папку с проектом...</p>
+        </div>
+
+        <div id="statsContainer" class="stats" style="display: none;"></div>
+
+        <div id="tabsContainer" style="display: none;">
+            <div class="tabs-header" id="tabsHeader"></div>
+            <div id="tabsContent"></div>
+        </div>
+
+        <div class="actions">
+            <button class="btn-primary" id="downloadBtn" style="display: none;">💾 Скачать TXT</button>
+            <button class="btn-secondary" id="copyAllBtn" style="display: none;">📋 Копировать всё</button>
+        </div>
+
+        <div class="info">
+            <strong>📝 Инструкция:</strong><br>
+            1. Установите лимит символов<br>
+            2. Выберите папку проекта<br>
+            3. Копируйте части по очереди
+        </div>
+    </div>
+
+    <!-- Скрытое поле для fallback копирования -->
+    <textarea id="hiddenTextarea"></textarea>
+
+    <script>
+        // Глобальные переменные
+        let resultText = '';
+        let parts = [];
+
+        const IGNORE = ['node_modules', '.git', '.vscode', '.DS_Store', 'export.html', '.next', 'dist', 'build'];
+        const ALLOWED = ['.html', '.css', '.js', '.jsx', '.ts', '.tsx', '.json', '.md', '.txt', '.vue'];
+
+        // Универсальная функция копирования
+        function copyToClipboard(text) {
+            return new Promise((resolve, reject) => {
+                // Способ 1: Clipboard API
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(text)
+                        .then(resolve)
+                        .catch(() => fallbackCopy(text, resolve, reject));
+                } else {
+                    // Способ 2: Fallback через textarea
+                    fallbackCopy(text, resolve, reject);
+                }
+            });
+        }
+
+        function fallbackCopy(text, resolve, reject) {
+            const textarea = document.getElementById('hiddenTextarea');
+            textarea.value = text;
+            textarea.style.left = '0';
+            textarea.select();
+
+            try {
+                document.execCommand('copy');
+                textarea.style.left = '-9999px';
+                resolve();
+            } catch (err) {
+                textarea.style.left = '-9999px';
+                reject(err);
+            }
+        }
+
+        // Функция копирования части - ГЛОБАЛЬНАЯ
+        window.copyPart = function (index) {
+            const btn = document.querySelectorAll('.copy-part-btn')[index];
+
+            copyToClipboard(parts[index])
+                .then(() => {
+                    btn.textContent = '✅ Скопировано!';
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        btn.textContent = `📋 Копировать часть ${index + 1}`;
+                        btn.classList.remove('copied');
+                    }, 2000);
+                })
+                .catch(err => {
+                    btn.textContent = '❌ Ошибка';
+                    console.error('Copy error:', err);
+                });
+        };
+
+        // Переключение вкладок - ГЛОБАЛЬНАЯ
+        window.switchTab = function (index) {
+            document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+                btn.classList.toggle('active', i === index);
+            });
+            document.querySelectorAll('.tab-content').forEach((content, i) => {
+                content.classList.toggle('active', i === index);
+            });
+        };
+
+        // Обработка выбора файлов
+        document.getElementById('fileInput').addEventListener('change', async (e) => {
+            const files = Array.from(e.target.files);
+            const CHAR_LIMIT = parseInt(document.getElementById('charLimit').value) || 4000;
+
+            const filteredFiles = files.filter(file => {
+                const pathParts = file.webkitRelativePath.split('/');
+                for (const part of pathParts) {
+                    if (IGNORE.includes(part)) return false;
+                }
+                const ext = '.' + file.name.split('.').pop().toLowerCase();
+                return ALLOWED.includes(ext);
+            });
+
+            filteredFiles.sort((a, b) => a.webkitRelativePath.localeCompare(b.webkitRelativePath));
+
+            document.getElementById('fileList').innerHTML = filteredFiles.map(f =>
+                `<div class="file-item">📄 ${f.webkitRelativePath}</div>`
+            ).join('');
+
+            // Собираем текст
+            resultText = '';
+            resultText += '=== ЭКСПОРТ ПРОЕКТА (' + new Date().toLocaleDateString('ru-RU') + ') ===\n\n';
+            resultText += '=== СТРУКТУРА ===\n\n';
+            resultText += buildTree(filteredFiles) + '\n\n';
+            resultText += '=== ФАЙЛЫ ===\n';
+
+            for (const file of filteredFiles) {
+                const content = await readFile(file);
+                resultText += '\n--- ' + file.webkitRelativePath + ' ---\n\n';
+                resultText += content + '\n';
+            }
+
+            // Разбиваем на части
+            parts = splitIntoParts(resultText, CHAR_LIMIT);
+
+            // Статистика
+            document.getElementById('statsContainer').innerHTML = `
+                <strong>📊 Статистика:</strong> 
+                Всего: <strong>${resultText.length.toLocaleString()}</strong> символов | 
+                Частей: <strong>${parts.length}</strong>
+            `;
+            document.getElementById('statsContainer').style.display = 'block';
+
+            // Создаём табы
+            renderTabs(parts);
+
+            document.getElementById('tabsContainer').style.display = 'block';
+            document.getElementById('downloadBtn').style.display = 'inline-block';
+            document.getElementById('copyAllBtn').style.display = 'inline-block';
+        });
+
+        function splitIntoParts(text, limit) {
+            const result = [];
+            const lines = text.split('\n');
+            let current = '';
+
+            for (const line of lines) {
+                if (current.length + line.length + 1 > limit && current.length > 0) {
+                    result.push(current.trim());
+                    current = line + '\n';
+                } else {
+                    current += line + '\n';
+                }
+            }
+            if (current.trim()) {
+                result.push(current.trim());
+            }
+
+            // Добавляем заголовки
+            return result.map((part, i) =>
+                `[ЧАСТЬ ${i + 1}/${result.length}]\n\n${part}`
+            );
+        }
+
+        function renderTabs(parts) {
+            const header = document.getElementById('tabsHeader');
+            const content = document.getElementById('tabsContent');
+            header.innerHTML = '';
+            content.innerHTML = '';
+
+            parts.forEach((part, i) => {
+                // Кнопка таба
+                const btn = document.createElement('button');
+                btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+                btn.textContent = `Часть ${i + 1}`;
+                btn.onclick = () => switchTab(i);
+                header.appendChild(btn);
+
+                // Контент
+                const div = document.createElement('div');
+                div.className = 'tab-content' + (i === 0 ? ' active' : '');
+                div.innerHTML = `
+                    <div class="part-header">
+                        <span class="char-count">📊 ${part.length} символов</span>
+                        <button class="copy-part-btn" onclick="copyPart(${i})">📋 Копировать часть ${i + 1}</button>
+                    </div>
+                    <pre>${escapeHtml(part)}</pre>
+                `;
+                content.appendChild(div);
+            });
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function readFile(file) {
+            return new Promise(resolve => {
+                const reader = new FileReader();
+                reader.onload = e => resolve(e.target.result);
+                reader.onerror = () => resolve('[Ошибка чтения]');
+                reader.readAsText(file);
+            });
+        }
+
+        function buildTree(files) {
+            const tree = {};
+            files.forEach(file => {
+                const parts = file.webkitRelativePath.split('/');
+                let current = tree;
+                parts.forEach((part, i) => {
+                    if (i === parts.length - 1) current[part] = null;
+                    else {
+                        if (!current[part]) current[part] = {};
+                        current = current[part];
+                    }
+                });
+            });
+
+            function render(obj, prefix = '') {
+                let result = '';
+                const keys = Object.keys(obj);
+                keys.forEach((key, i) => {
+                    const isLast = i === keys.length - 1;
+                    const conn = isLast ? '└── ' : '├── ';
+                    const newPre = prefix + (isLast ? '    ' : '│   ');
+                    result += prefix + conn + (obj[key] === null ? key : '📁 ' + key + '/') + '\n';
+                    if (obj[key]) result += render(obj[key], newPre);
+                });
+                return result;
+            }
+            return render(tree);
+        }
+
+        // Кнопка скачать
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            const blob = new Blob([resultText], { type: 'text/plain;charset=utf-8' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'project-export.txt';
+            a.click();
+        });
+
+        // Кнопка копировать всё
+        document.getElementById('copyAllBtn').addEventListener('click', () => {
+            const btn = document.getElementById('copyAllBtn');
+            copyToClipboard(resultText)
+                .then(() => {
+                    btn.textContent = '✅ Скопировано!';
+                    setTimeout(() => btn.textContent = '📋 Копировать всё', 2000);
+                });
+        });
+    </script>
+</body>
+
+</html>

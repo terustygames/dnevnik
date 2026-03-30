@@ -1,0 +1,1102 @@
+/* ========== ОСНОВНЫЕ СТИЛИ ========== */
+.main-content {
+    margin-top: 60px;
+    padding: 0;
+    min-height: calc(100vh - 60px);
+    background: #f4f6f8;
+}
+
+/* ========== ПАНЕЛЬ ГРУППЫ ========== */
+.group-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background: white;
+    border-bottom: 1px solid #e0e0e0;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.group-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.group-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.group-code {
+    font-size: 0.9rem;
+    color: #666;
+    background: #f5f5f5;
+    padding: 5px 12px;
+    border-radius: 4px;
+}
+
+.group-code strong {
+    color: #4a76a8;
+    font-family: monospace;
+    letter-spacing: 1px;
+}
+
+.group-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-text {
+    background: none;
+    border: none;
+    color: #4a76a8;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 5px 0;
+}
+
+.btn-text:hover {
+    text-decoration: underline;
+}
+
+/* ========== ЖУРНАЛ (ДЛЯ ПРЕПОДАВАТЕЛЯ) ========== */
+.journal-container {
+    padding: 20px;
+}
+
+.journal-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.subject-select-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.subject-select-wrapper label {
+    font-weight: 500;
+    color: #555;
+}
+
+.subject-select {
+    min-width: 250px;
+    padding: 10px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    background: white;
+}
+
+.subject-select:focus {
+    outline: none;
+    border-color: #4a76a8;
+}
+
+.toolbar-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* ========== EXCEL-ПОДОБНАЯ ТАБЛИЦА ========== */
+.journal-table-wrapper {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    overflow: auto;
+    max-height: calc(100vh - 280px);
+    position: relative;
+}
+
+.journal-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+    user-select: none;
+}
+
+.journal-table th,
+.journal-table td {
+    border: 1px solid #e0e0e0;
+    text-align: center;
+    position: relative;
+}
+
+.journal-table th {
+    background: #f8f9fa;
+    padding: 12px 8px;
+    font-weight: 600;
+    color: #555;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* Подсветка столбца при выборе */
+.journal-table th.col-highlight {
+    background: #e3f2fd !important;
+    color: #1976d2;
+}
+
+.journal-table th.col-highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #1976d2;
+}
+
+.journal-table th.student-name-col {
+    text-align: left;
+    min-width: 200px;
+    padding-left: 15px;
+    position: sticky;
+    left: 0;
+    z-index: 20;
+    background: #f0f2f5;
+}
+
+.journal-table th.date-col {
+    min-width: 50px;
+    font-size: 0.8rem;
+    padding: 8px 5px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.journal-table th.date-col:hover {
+    background: #e8e8e8;
+}
+
+.journal-table th.date-col .date-day {
+    display: block;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.journal-table th.date-col .date-month {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: #888;
+}
+
+/* Сегодняшняя дата */
+.journal-table th.date-col.today {
+    background: #e8f5e9;
+}
+
+.journal-table th.date-col.today .date-day {
+    color: #2e7d32;
+}
+
+.journal-table th.avg-col {
+    min-width: 60px;
+    background: #e8f4e8;
+}
+
+/* Строка студента */
+.journal-table td.student-name {
+    text-align: left;
+    padding: 12px 15px;
+    font-weight: 500;
+    color: #333;
+    background: white;
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    cursor: default;
+    transition: all 0.15s ease;
+}
+
+/* Подсветка строки при выборе */
+.journal-table tr.row-highlight td.student-name {
+    background: #e3f2fd !important;
+    color: #1976d2;
+}
+
+.journal-table tr.row-highlight td.student-name::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 3px;
+    background: #1976d2;
+}
+
+.journal-table tbody tr:hover td {
+    background: #fafafa;
+}
+
+.journal-table tbody tr:hover td.student-name {
+    background: #f5f5f5;
+}
+
+/* ========== ЯЧЕЙКА С ОЦЕНКОЙ ========== */
+.journal-table td.grade-cell {
+    padding: 0;
+    width: 50px;
+    height: 45px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    position: relative;
+}
+
+.journal-table td.grade-cell:hover {
+    background: #f0f7ff;
+}
+
+/* Выбранная ячейка */
+.journal-table td.grade-cell.selected {
+    background: #e3f2fd !important;
+    box-shadow: inset 0 0 0 2px #1976d2;
+    z-index: 5;
+}
+
+/* Активная ячейка (режим редактирования) */
+.journal-table td.grade-cell.editing {
+    background: #fff8e1 !important;
+    box-shadow: inset 0 0 0 3px #ff9800;
+    z-index: 6;
+}
+
+/* Ячейки в выделенном диапазоне */
+.journal-table td.grade-cell.in-range {
+    background: #e8f0fe !important;
+}
+
+/* Подсветка столбца */
+.journal-table td.grade-cell.col-highlight {
+    background: #f3f8ff;
+}
+
+/* Подсветка строки */
+.journal-table tr.row-highlight td.grade-cell {
+    background: #f3f8ff;
+}
+
+/* Пересечение строки и столбца */
+.journal-table tr.row-highlight td.grade-cell.col-highlight {
+    background: #e3f2fd;
+}
+
+/* Отображение оценки */
+.grade-display {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.grade-display.grade-5 {
+    color: #2e7d32;
+}
+
+.grade-display.grade-4 {
+    color: #1976d2;
+}
+
+.grade-display.grade-3 {
+    color: #f57c00;
+}
+
+.grade-display.grade-2 {
+    color: #d32f2f;
+}
+
+.grade-display.grade-n {
+    color: #757575;
+}
+
+/* Поле ввода в ячейке */
+.grade-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: white;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    outline: none;
+    box-shadow: 0 0 0 3px #ff9800;
+    z-index: 10;
+}
+
+/* Средний балл */
+.journal-table td.avg-cell {
+    background: #f1f8f1;
+    font-weight: 600;
+    padding: 12px 8px;
+}
+
+.avg-value {
+    font-size: 1rem;
+}
+
+.avg-value.avg-5 {
+    color: #2e7d32;
+}
+
+.avg-value.avg-4 {
+    color: #1976d2;
+}
+
+.avg-value.avg-3 {
+    color: #f57c00;
+}
+
+.avg-value.avg-2 {
+    color: #d32f2f;
+}
+
+/* ========== КОНТЕКСТНОЕ МЕНЮ ========== */
+.context-menu {
+    position: fixed;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    padding: 8px 0;
+    z-index: 1000;
+    min-width: 180px;
+    display: none;
+}
+
+.context-menu.show {
+    display: block;
+    animation: contextMenuIn 0.15s ease;
+}
+
+@keyframes contextMenuIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.context-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #333;
+    transition: background 0.1s ease;
+}
+
+.context-menu-item:hover {
+    background: #f5f5f5;
+}
+
+.context-menu-item svg {
+    width: 16px;
+    height: 16px;
+    color: #666;
+}
+
+.context-menu-item.danger {
+    color: #d32f2f;
+}
+
+.context-menu-item.danger svg {
+    color: #d32f2f;
+}
+
+.context-menu-divider {
+    height: 1px;
+    background: #eee;
+    margin: 6px 0;
+}
+
+.context-menu-item .shortcut {
+    margin-left: auto;
+    font-size: 0.75rem;
+    color: #999;
+}
+
+/* ========== ПАНЕЛЬ БЫСТРЫХ ОЦЕНОК ========== */
+.quick-grades-panel {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.2);
+    padding: 12px 20px;
+    display: flex;
+    gap: 8px;
+    z-index: 100;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.quick-grades-panel.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.quick-grade-btn {
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.quick-grade-btn:hover {
+    transform: scale(1.1);
+}
+
+.quick-grade-btn.grade-5 {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.quick-grade-btn.grade-4 {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.quick-grade-btn.grade-3 {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.quick-grade-btn.grade-2 {
+    background: #ffebee;
+    color: #d32f2f;
+}
+
+.quick-grade-btn.grade-n {
+    background: #f5f5f5;
+    color: #757575;
+}
+
+.quick-grade-btn.grade-clear {
+    background: #fafafa;
+    color: #999;
+    font-size: 1rem;
+}
+
+/* Подсказка клавиши */
+.quick-grade-btn::after {
+    content: attr(data-key);
+    position: absolute;
+    top: -8px;
+    right: -5px;
+    background: #333;
+    color: white;
+    font-size: 0.6rem;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.quick-grade-btn {
+    position: relative;
+}
+
+/* ========== ИНДИКАТОР ВЫБОРА ========== */
+.selection-info {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #333;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    z-index: 100;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+}
+
+.selection-info.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ========== ЛЕГЕНДА И ПОДСКАЗКИ ========== */
+.journal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding: 12px 20px;
+    background: white;
+    border-radius: 8px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.journal-legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.grade-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.grade-dot.grade-5 {
+    background: #2e7d32;
+}
+
+.grade-dot.grade-4 {
+    background: #1976d2;
+}
+
+.grade-dot.grade-3 {
+    background: #f57c00;
+}
+
+.grade-dot.grade-2 {
+    background: #d32f2f;
+}
+
+.grade-dot.grade-n {
+    background: #757575;
+}
+
+.keyboard-hints {
+    display: flex;
+    gap: 15px;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.keyboard-hint {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.key {
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.75rem;
+}
+
+/* ========== ВЬЮХА СТУДЕНТА ========== */
+.student-container {
+    padding: 20px;
+}
+
+.student-header {
+    margin-bottom: 20px;
+}
+
+.student-header h2 {
+    font-size: 1.4rem;
+    color: #333;
+}
+
+.student-table-wrapper {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    overflow: auto;
+    max-height: calc(100vh - 300px);
+}
+
+.student-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 500px;
+}
+
+.student-table th,
+.student-table td {
+    border: 1px solid #e8e8e8;
+    padding: 12px;
+    text-align: center;
+}
+
+.student-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #555;
+    position: sticky;
+    top: 0;
+}
+
+.student-table th.subject-col {
+    text-align: left;
+    min-width: 180px;
+}
+
+.student-table td.subject-name {
+    text-align: left;
+    font-weight: 500;
+    background: #fafafa;
+}
+
+.student-table .grade-value {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    border-radius: 6px;
+    font-weight: 700;
+    color: white;
+}
+
+.student-table .grade-value.grade-5 {
+    background: #2e7d32;
+}
+
+.student-table .grade-value.grade-4 {
+    background: #1976d2;
+}
+
+.student-table .grade-value.grade-3 {
+    background: #f57c00;
+}
+
+.student-table .grade-value.grade-2 {
+    background: #d32f2f;
+}
+
+.student-table .grade-value.grade-n {
+    background: #757575;
+}
+
+.student-table td.avg-cell {
+    background: #f1f8f1;
+    font-weight: 600;
+}
+
+/* Итоги */
+.student-summary {
+    margin-top: 20px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.summary-item {
+    text-align: center;
+}
+
+.summary-item .value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #4a76a8;
+}
+
+.summary-item .label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* ========== МОДАЛЬНЫЕ ОКНА ========== */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow: auto;
+    animation: modalIn 0.2s ease;
+}
+
+.modal-small {
+    max-width: 350px;
+}
+
+@keyframes modalIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-header h3 {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #999;
+    padding: 0;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    color: #333;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+/* Настройки */
+.settings-block {
+    margin-bottom: 25px;
+}
+
+.settings-block h4 {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+.settings-block.danger {
+    border-top: 2px solid #e74c3c;
+    padding-top: 20px;
+}
+
+.settings-block.danger h4 {
+    color: #e74c3c;
+}
+
+.tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #e8f0fe;
+    color: #4a76a8;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.tag button {
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.tag button:hover {
+    color: #e74c3c;
+}
+
+.add-form {
+    display: flex;
+    gap: 10px;
+}
+
+.add-form input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+
+.add-form input:focus {
+    outline: none;
+    border-color: #4a76a8;
+}
+
+/* Участники */
+.members-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.member-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.member-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #4a76a8;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.member-details {
+    flex: 1;
+}
+
+.member-details strong {
+    display: block;
+    color: #333;
+}
+
+.member-details span {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.member-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.member-badge.admin {
+    background: #e8f0fe;
+    color: #4a76a8;
+}
+
+.member-badge.member {
+    background: #f0f0f0;
+    color: #666;
+}
+
+/* Форма */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #555;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #4a76a8;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Кнопки */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background: #4a76a8;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #3a5f88;
+}
+
+.btn-secondary {
+    background: #f0f0f0;
+    color: #555;
+}
+
+.btn-secondary:hover {
+    background: #e0e0e0;
+}
+
+.btn-outline {
+    background: white;
+    color: #666;
+    border: 1px solid #ddd;
+}
+
+.btn-outline:hover {
+    background: #f5f5f5;
+}
+
+.btn-danger {
+    background: #e74c3c;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c0392b;
+}
+
+.btn-small {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+}
+
+/* Toast */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: #333;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 2000;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.toast.success {
+    background: #2e7d32;
+}
+
+.toast.error {
+    background: #d32f2f;
+}
+
+.toast.warning {
+    background: #f57c00;
+}
+
+/* ========== АДАПТИВНОСТЬ ========== */
+@media (max-width: 768px) {
+    .group-bar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .journal-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .subject-select {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .toolbar-actions {
+        width: 100%;
+    }
+
+    .toolbar-actions .btn {
+        flex: 1;
+    }
+
+    .journal-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .keyboard-hints {
+        display: none;
+    }
+
+    .quick-grades-panel {
+        bottom: 20px;
+        padding: 10px 15px;
+    }
+
+    .quick-grade-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+}

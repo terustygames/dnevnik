@@ -1,70 +1,68 @@
 import { auth, db } from './firebase-config.js';
-import { createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-const registerForm = document.getElementById('registerForm');
-const emailInput = document.getElementById('email');
-const confirmPasswordInput = document.getElementById('confirmPassword');
-const emailError = document.getElementById('emailError');
-const passwordError = document.getElementById('passwordError');
-const registerBtn = document.getElementById('registerBtn');
+const menuBtn = document.getElementById('menuBtn');
+const closeBtn = document.getElementById('closeBtn');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+const notificationBtn = document.getElementById('notificationBtn');
+const profileBtn = document.getElementById('profileBtn');
+const userNameElement = document.getElementById('userName');
+const currentDateElement = document.getElementById('currentDate');
 
-registerForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+function openSidebar() {
+    sidebar.classList.add('active');
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
 
-    emailError.textContent = '';
-    passwordError.textContent = '';
-    emailInput.classList.remove('error');
-    confirmPasswordInput.classList.remove('error');
+function closeSidebar() {
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
 
-    const formData = new FormData(registerForm);
-    const fullName = formData.get('fullName');
-    const email = formData.get('email');
-    const password = formData.get('password');
-    const confirmPassword = formData.get('confirmPassword');
+function formatDate() {
+    const now = new Date();
+    const options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    };
+    return now.toLocaleDateString('ru-RU', options);
+}
 
-    if (password !== confirmPassword) {
-        passwordError.textContent = 'Пароли не совпадают';
-        confirmPasswordInput.classList.add('error');
-        return;
+menuBtn.addEventListener('click', openSidebar);
+closeBtn.addEventListener('click', closeSidebar);
+overlay.addEventListener('click', closeSidebar);
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeSidebar();
     }
+});
 
-    if (password.length < 6) {
-        passwordError.textContent = 'Пароль должен быть минимум 6 символов';
-        confirmPasswordInput.classList.add('error');
-        return;
-    }
+notificationBtn.addEventListener('click', () => {
+    console.log('Уведомления открыты');
+});
 
-    registerBtn.disabled = true;
-    registerBtn.textContent = 'Регистрация...';
+profileBtn.addEventListener('click', () => {
+    window.location.href = 'profile.html';
+});
 
-    try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-
-        await setDoc(doc(db, 'users', user.uid), {
-            fullName: fullName,
-            email: email,
-            createdAt: new Date().toISOString()
-        });
-
+onAuthStateChanged(auth, async (user) => {
+    if (!user) {
         window.location.href = 'login.html';
-    } catch (error) {
-        registerBtn.disabled = false;
-        registerBtn.textContent = 'Зарегистрироваться';
-
-        if (error.code === 'auth/email-already-in-use') {
-            emailError.textContent = 'Пользователь с таким email уже существует';
-            emailInput.classList.add('error');
-        } else if (error.code === 'auth/invalid-email') {
-            emailError.textContent = 'Неверный формат email';
-            emailInput.classList.add('error');
-        } else if (error.code === 'auth/weak-password') {
-            passwordError.textContent = 'Слишком слабый пароль';
-            confirmPasswordInput.classList.add('error');
-        } else {
-            emailError.textContent = 'Ошибка регистрации';
-            emailInput.classList.add('error');
+    } else {
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            userNameElement.textContent = userData.fullName;
+            currentDateElement.textContent = formatDate();
         }
     }
 });
+
+console.log('Электронный дневник загружен');
