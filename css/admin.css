@@ -370,3 +370,14 @@
         justify-content: center;
     }
 }
+
+/* Исправление: добавляем padding для контента */
+.admin-content {
+    padding: 25px;
+}
+
+/* Исправление: убираем дублирование стилей */
+.users-list {
+    max-height: 600px;
+    overflow-y: auto;
+}

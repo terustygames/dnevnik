@@ -25,6 +25,7 @@ const usersList = document.getElementById('usersList');
 const userSearch = document.getElementById('userSearch');
 
 let allUsers = [];
+let isLoading = false;
 
 // Сайдбар
 function openSidebar() {
@@ -37,13 +38,15 @@ function closeSidebarFunc() {
     overlay.classList.remove('active');
 }
 
-menuBtn.addEventListener('click', openSidebar);
-closeBtn.addEventListener('click', closeSidebarFunc);
-overlay.addEventListener('click', closeSidebarFunc);
+if (menuBtn) menuBtn.addEventListener('click', openSidebar);
+if (closeBtn) closeBtn.addEventListener('click', closeSidebarFunc);
+if (overlay) overlay.addEventListener('click', closeSidebarFunc);
 
-profileBtn.addEventListener('click', () => {
-    window.location.href = 'profile.html';
-});
+if (profileBtn) {
+    profileBtn.addEventListener('click', () => {
+        window.location.href = 'profile.html';
+    });
+}
 
 // Toast
 function showToast(message, type = 'success') {
@@ -75,10 +78,10 @@ function showToast(message, type = 'success') {
 
     document.body.appendChild(toast);
 
-    setTimeout(() => {
+    requestAnimationFrame(() => {
         toast.style.opacity = '1';
         toast.style.transform = 'translateX(0)';
-    }, 10);
+    });
 
     setTimeout(() => {
         toast.style.opacity = '0';
@@ -100,12 +103,12 @@ async function loadStats() {
         const usersSnap = await getDocs(collection(db, 'users'));
         allUsers = usersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-        totalUsers.textContent = allUsers.length;
-        totalTeachers.textContent = allUsers.filter(u => u.role === 'teacher').length;
+        if (totalUsers) totalUsers.textContent = allUsers.length;
+        if (totalTeachers) totalTeachers.textContent = allUsers.filter(u => u.role === 'teacher').length;
 
         // Группы
         const groupsSnap = await getDocs(collection(db, 'groups'));
-        totalGroups.textContent = groupsSnap.size;
+        if (totalGroups) totalGroups.textContent = groupsSnap.size;
 
     } catch (error) {
         console.error('Ошибка загрузки статистики:', error);
@@ -114,6 +117,17 @@ async function loadStats() {
 
 // Загрузка пользователей
 async function loadUsers() {
+    if (isLoading) return;
+    isLoading = true;
+
+    if (usersList) {
+        usersList.innerHTML = `
+            <div class="empty-state">
+                <p>Загрузка...</p>
+            </div>
+        `;
+    }
+
     try {
         const snapshot = await getDocs(collection(db, 'users'));
         allUsers = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -122,16 +136,22 @@ async function loadUsers() {
 
     } catch (error) {
         console.error('Ошибка загрузки пользователей:', error);
-        usersList.innerHTML = `
-            <div class="empty-state">
-                <p>Ошибка загрузки пользователей</p>
-            </div>
-        `;
+        if (usersList) {
+            usersList.innerHTML = `
+                <div class="empty-state">
+                    <p>Ошибка загрузки пользователей</p>
+                </div>
+            `;
+        }
+    } finally {
+        isLoading = false;
     }
 }
 
 // Отрисовка пользователей
 function renderUsers(users) {
+    if (!usersList) return;
+
     if (users.length === 0) {
         usersList.innerHTML = `
             <div class="empty-state">
@@ -161,7 +181,7 @@ function renderUsers(users) {
                 </div>
                 <div class="user-actions">
                     <span class="user-role ${roleClass}">${roleName}</span>
-                    <select class="role-select" onchange="changeUserRole('${user.id}', this.value)">
+                    <select class="role-select" data-userid="${user.id}">
                         <option value="user" ${role === 'user' ? 'selected' : ''}>Пользователь</option>
                         <option value="teacher" ${role === 'teacher' ? 'selected' : ''}>Преподаватель</option>
                         <option value="admin" ${role === 'admin' ? 'selected' : ''}>Администратор</option>
@@ -170,12 +190,28 @@ function renderUsers(users) {
             </div>
         `;
     }).join('');
+
+    // Добавляем обработчики для селектов
+    document.querySelectorAll('.role-select').forEach(select => {
+        select.addEventListener('change', async (e) => {
+            const userId = e.target.dataset.userid;
+            const newRole = e.target.value;
+            await changeUserRole(userId, newRole);
+        });
+    });
 }
 
 // Изменить роль пользователя
-window.changeUserRole = async function (userId, newRole) {
-    if (!confirm(`Изменить роль пользователя на "${newRole}"?`)) {
-        loadUsers();
+async function changeUserRole(userId, newRole) {
+    const roleName = {
+        'user': 'Пользователь',
+        'teacher': 'Преподаватель',
+        'admin': 'Администратор'
+    }[newRole];
+
+    if (!confirm(`Изменить роль пользователя на "${roleName}"?`)) {
+        // Откатываем выбор
+        await loadUsers();
         return;
     }
 
@@ -187,32 +223,34 @@ window.changeUserRole = async function (userId, newRole) {
         });
 
         showToast('Роль успешно изменена');
-        loadUsers();
-        loadStats();
+        await loadStats();
+        await loadUsers();
 
     } catch (error) {
         console.error('Ошибка изменения роли:', error);
         showToast('Ошибка при изменении роли', 'error');
-        loadUsers();
+        await loadUsers();
     }
-};
+}
 
 // Поиск пользователей
-userSearch.addEventListener('input', (e) => {
-    const searchTerm = e.target.value.toLowerCase().trim();
+if (userSearch) {
+    userSearch.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase().trim();
 
-    if (!searchTerm) {
-        renderUsers(allUsers);
-        return;
-    }
+        if (!searchTerm) {
+            renderUsers(allUsers);
+            return;
+        }
 
-    const filtered = allUsers.filter(user =>
-        (user.fullName && user.fullName.toLowerCase().includes(searchTerm)) ||
-        (user.email && user.email.toLowerCase().includes(searchTerm))
-    );
+        const filtered = allUsers.filter(user =>
+            (user.fullName && user.fullName.toLowerCase().includes(searchTerm)) ||
+            (user.email && user.email.toLowerCase().includes(searchTerm))
+        );
 
-    renderUsers(filtered);
-});
+        renderUsers(filtered);
+    });
+}
 
 // Проверка авторизации и прав
 onAuthStateChanged(auth, async (user) => {
