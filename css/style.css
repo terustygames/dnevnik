@@ -434,3 +434,150 @@ body {
         padding: 15px;
     }
 }
+
+/* ========== УЛУЧШЕННАЯ АДАПТИВНОСТЬ ========== */
+
+@media (max-width: 768px) {
+    .header {
+        padding: 0 10px;
+    }
+
+    .header-title h1 {
+        font-size: 1rem;
+    }
+
+    .logo-img {
+        width: 36px;
+        height: 36px;
+    }
+
+    .sidebar {
+        width: 280px;
+    }
+
+    .container {
+        padding: 20px 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        height: 56px;
+        padding: 0 8px;
+    }
+
+    .header-title {
+        display: none;
+    }
+
+    .logo-img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .header-btn {
+        padding: 8px;
+    }
+
+    .hamburger-icon {
+        width: 20px;
+        height: 14px;
+    }
+
+    .icon {
+        width: 22px;
+        height: 22px;
+    }
+
+    .sidebar {
+        width: 100%;
+        left: -100%;
+    }
+
+    .sidebar-header {
+        padding: 15px;
+    }
+
+    .sidebar-header h2 {
+        font-size: 1.1rem;
+    }
+
+    .nav-item {
+        padding: 14px 20px;
+    }
+
+    .nav-icon {
+        width: 22px;
+        height: 22px;
+    }
+
+    .main-content {
+        margin-top: 56px;
+        padding: 10px;
+    }
+
+    .container {
+        padding: 15px 10px;
+        border-radius: 8px;
+    }
+
+    .footer {
+        padding: 15px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .header {
+        height: 52px;
+        padding: 0 6px;
+    }
+
+    .logo-img {
+        width: 28px;
+        height: 28px;
+    }
+
+    .main-content {
+        margin-top: 52px;
+        padding: 8px;
+    }
+
+    .container {
+        padding: 12px 8px;
+    }
+}
+
+@supports (padding: max(0px)) {
+    .header {
+        padding-left: max(10px, env(safe-area-inset-left));
+        padding-right: max(10px, env(safe-area-inset-right));
+    }
+
+    .main-content {
+        padding-bottom: max(20px, env(safe-area-inset-bottom));
+    }
+}
+
+@media (hover: none) {
+    .nav-item:hover {
+        background-color: transparent;
+        border-left-color: transparent;
+    }
+
+    .nav-item.active:hover {
+        background-color: #e8f0fe;
+        border-left-color: #4a76a8;
+    }
+
+    .header-btn:hover {
+        background-color: transparent;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}

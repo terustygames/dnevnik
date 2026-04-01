@@ -3,209 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Главная - Электронный дневник</title>
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        .main-content {
-            margin-top: 60px;
-            padding: 20px;
-            min-height: calc(100vh - 60px);
-            background: #f0f2f5;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .page-header {
-            margin-bottom: 30px;
-        }
-
-        .page-header h2 {
-            font-size: 1.8rem;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .page-header p {
-            color: #666;
-            font-size: 1rem;
-        }
-
-        /* Доска замен */
-        .replacements-board {
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-        }
-
-        .board-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f2f5;
-        }
-
-        .board-header h3 {
-            font-size: 1.4rem;
-            color: #333;
-        }
-
-        .date-filter {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .date-filter label {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .date-filter input {
-            padding: 8px 12px;
-            border: 1px solid #d0d0d0;
-            border-radius: 6px;
-            font-size: 0.9rem;
-        }
-
-        /* Список замен */
-        .replacements-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .replacement-item {
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border-left: 4px solid #4a76a8;
-            transition: all 0.3s ease;
-        }
-
-        .replacement-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .replacement-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 10px;
-        }
-
-        .replacement-date {
-            display: inline-block;
-            background: #e8f0fe;
-            color: #4a76a8;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .replacement-time {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .replacement-info {
-            margin-top: 10px;
-        }
-
-        .replacement-row {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-        }
-
-        .replacement-label {
-            color: #666;
-            min-width: 120px;
-        }
-
-        .replacement-value {
-            color: #333;
-            font-weight: 500;
-        }
-
-        .replacement-reason {
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid #e0e0e0;
-            color: #666;
-            font-size: 0.9rem;
-            font-style: italic;
-        }
-
-        /* Пустое состояние */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .empty-state svg {
-            width: 80px;
-            height: 80px;
-            color: #d0d0d0;
-            margin-bottom: 20px;
-        }
-
-        .empty-state h3 {
-            font-size: 1.3rem;
-            color: #666;
-            margin-bottom: 10px;
-        }
-
-        .empty-state p {
-            color: #999;
-            font-size: 0.95rem;
-        }
-
-        /* Кнопка добавления замены (для преподавателей) */
-        .btn-add-replacement {
-            padding: 10px 20px;
-            background: #4a76a8;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .btn-add-replacement:hover {
-            background: #3a5f88;
-        }
-
-        /* Адаптивность */
-        @media (max-width: 768px) {
-            .board-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-
-            .replacement-row {
-                flex-direction: column;
-                gap: 5px;
-            }
-
-            .replacement-label {
-                min-width: auto;
-                font-weight: 600;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/index.css">
 </head>
 
 <body>
@@ -214,7 +15,7 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h2>Меню</h2>
-            <button class="close-btn" id="closeBtn">✕</button>
+            <button class="close-btn" id="closeBtn">×</button>
         </div>
         <nav class="sidebar-nav">
             <a href="index.html" class="nav-item active">
@@ -233,6 +34,16 @@
                     <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                 </svg>
                 <span>Группы</span>
+            </a>
+
+            <a href="admin.html" class="nav-item" id="adminNavItem" style="display: none;">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path
+                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                    </path>
+                </svg>
+                <span>Админ-панель</span>
             </a>
 
             <a href="profile.html" class="nav-item">
@@ -263,14 +74,6 @@
         </div>
 
         <div class="header-actions">
-            <button class="header-btn notification-btn" id="notificationBtn">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                </svg>
-                <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
-            </button>
-
             <button class="header-btn profile-btn" id="profileBtn">
                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -283,149 +86,109 @@
     <main class="main-content">
         <div class="container">
             <div class="page-header">
-                <h2>Добро пожаловать в электронный дневник</h2>
+                <h2>Добро пожаловать!</h2>
                 <p id="currentDate"></p>
             </div>
 
-            <!-- Доска замен -->
             <div class="replacements-board">
                 <div class="board-header">
                     <h3>Замены</h3>
-                    <div class="date-filter">
-                        <label for="replacementDate">Дата:</label>
-                        <input type="date" id="replacementDate">
+                    <div class="header-controls">
+                        <div class="date-filter">
+                            <input type="date" id="replacementDate">
+                        </div>
+                        <button class="btn-upload" id="uploadBtn" style="display: none;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            <span>Загрузить</span>
+                        </button>
                     </div>
                 </div>
 
                 <div class="replacements-list" id="replacementsList">
-                    <!-- Пустое состояние -->
-                    <div class="empty-state">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                            <line x1="16" y1="2" x2="16" y2="6"></line>
-                            <line x1="8" y1="2" x2="8" y2="6"></line>
-                            <line x1="3" y1="10" x2="21" y2="10"></line>
-                            <path d="M8 14h.01"></path>
-                            <path d="M12 14h.01"></path>
-                            <path d="M16 14h.01"></path>
-                            <path d="M8 18h.01"></path>
-                            <path d="M12 18h.01"></path>
-                            <path d="M16 18h.01"></path>
-                        </svg>
-                        <h3>Нет замен на выбранную дату</h3>
-                        <p>Здесь будут отображаться все изменения в расписании</p>
+                    <div class="loading-state">
+                        <div class="spinner"></div>
+                        <p>Загрузка...</p>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
+    <div class="modal" id="uploadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Загрузить изображение замен</h3>
+                <button class="modal-close" id="closeUploadModal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="uploadDate">Дата замен</label>
+                    <input type="date" id="uploadDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Изображение</label>
+                    <div class="upload-dropzone" id="uploadDropzone">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                        <p>Нажмите или перетащите изображение</p>
+                        <span class="dropzone-hint">PNG, JPG до 5MB</span>
+                        <input type="file" id="imageInput" accept="image/*" hidden>
+                    </div>
+                    <div class="image-preview" id="imagePreview" style="display: none;">
+                        <img id="previewImg" src="" alt="Preview">
+                        <button class="btn-remove-image" id="removeImage">×</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="uploadDescription">Описание (необязательно)</label>
+                    <textarea id="uploadDescription" rows="2" placeholder="Например: Замены на понедельник"></textarea>
+                </div>
+
+                <div class="upload-progress" id="uploadProgress" style="display: none;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <span class="progress-text" id="progressText">0%</span>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" id="cancelUpload">Отмена</button>
+                    <button class="btn btn-primary" id="confirmUpload" disabled>Загрузить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="image-viewer" id="imageViewer">
+        <button class="viewer-close" id="closeViewer">×</button>
+        <img id="viewerImage" src="" alt="Замены">
+        <div class="viewer-controls">
+            <button class="viewer-btn" id="zoomIn">+</button>
+            <button class="viewer-btn" id="zoomOut">-</button>
+            <button class="viewer-btn" id="downloadImage">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+            </button>
+        </div>
+    </div>
+
     <footer class="footer">
         <p>2025 Электронный дневник</p>
     </footer>
 
-    <script type="module">
-        import { auth } from './js/firebase-config.js';
-        import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-
-        // Форматирование даты
-        function formatDate() {
-            const now = new Date();
-            const options = {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            };
-            return now.toLocaleDateString('ru-RU', options);
-        }
-
-        // Установка текущей даты
-        function setCurrentDate() {
-            document.getElementById('currentDate').textContent = formatDate();
-
-            // Устанавливаем сегодняшнюю дату в фильтр
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('replacementDate').value = today;
-        }
-
-        // Боковое меню
-        const menuBtn = document.getElementById('menuBtn');
-        const closeBtn = document.getElementById('closeBtn');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
-
-        function openSidebar() {
-            sidebar.classList.add('active');
-            overlay.classList.add('active');
-        }
-
-        function closeSidebar() {
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-        }
-
-        menuBtn.addEventListener('click', openSidebar);
-        closeBtn.addEventListener('click', closeSidebar);
-        overlay.addEventListener('click', closeSidebar);
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeSidebar();
-            }
-        });
-
-        // Кнопки в шапке
-        document.getElementById('notificationBtn').addEventListener('click', () => {
-            console.log('Уведомления');
-        });
-
-        document.getElementById('profileBtn').addEventListener('click', () => {
-            window.location.href = 'profile.html';
-        });
-
-        // Фильтр по дате
-        document.getElementById('replacementDate').addEventListener('change', function () {
-            loadReplacements(this.value);
-        });
-
-        // Загрузка замен (пример функции)
-        function loadReplacements(date) {
-            const list = document.getElementById('replacementsList');
-
-            // Здесь будет загрузка данных из Firebase
-            // Пока показываем пустое состояние
-
-            list.innerHTML = `
-                <div class="empty-state">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                        <line x1="3" y1="10" x2="21" y2="10"></line>
-                        <path d="M8 14h.01"></path>
-                        <path d="M12 14h.01"></path>
-                        <path d="M16 14h.01"></path>
-                        <path d="M8 18h.01"></path>
-                        <path d="M12 18h.01"></path>
-                        <path d="M16 18h.01"></path>
-                    </svg>
-                    <h3>Нет замен на выбранную дату</h3>
-                    <p>Здесь будут отображаться все изменения в расписании</p>
-                </div>
-            `;
-        }
-
-        // Проверка авторизации
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                window.location.href = 'login.html';
-            } else {
-                setCurrentDate();
-                loadReplacements(document.getElementById('replacementDate').value);
-            }
-        });
-    </script>
+    <script type="module" src="js/index.js"></script>
 </body>
 
 </html>

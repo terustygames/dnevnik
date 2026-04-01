@@ -29,17 +29,27 @@ function toast(msg, type = 'success') {
     }, 2500);
 }
 
-// ========== САЙДБАР ==========
+// ========== САЙДБАР И НАВИГАЦИЯ ==========
 const menuBtn = document.getElementById('menuBtn');
 const closeBtn = document.getElementById('closeBtn');
 const sidebar = document.getElementById('sidebar');
 const overlay = document.getElementById('overlay');
+const profileBtn = document.getElementById('profileBtn');
+
+function openSidebar() {
+    sidebar.classList.add('active');
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeSidebar() {
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
 
 if (menuBtn) {
-    menuBtn.addEventListener('click', () => {
-        sidebar.classList.add('active');
-        overlay.classList.add('active');
-    });
+    menuBtn.addEventListener('click', openSidebar);
 }
 
 if (closeBtn) {
@@ -50,10 +60,22 @@ if (overlay) {
     overlay.addEventListener('click', closeSidebar);
 }
 
-function closeSidebar() {
-    sidebar.classList.remove('active');
-    overlay.classList.remove('active');
+if (profileBtn) {
+    profileBtn.addEventListener('click', () => {
+        window.location.href = 'profile.html';
+    });
 }
+
+// Закрытие по Escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeSidebar();
+        // Закрываем все модальные окна
+        document.querySelectorAll('.modal.active').forEach(modal => {
+            modal.classList.remove('active');
+        });
+    }
+});
 
 // ========== ЗАГРУЗКА ГРУППЫ ==========
 async function loadGroup() {
