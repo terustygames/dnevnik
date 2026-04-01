@@ -310,3 +310,69 @@
     background: #e74c3c;
     color: white;
 }
+
+/* Добавить в конец css/profile.css */
+
+/* Роли */
+.profile-role {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.role-user {
+    background-color: #f0f2f5;
+    color: #666;
+}
+
+.role-teacher {
+    background-color: #e8f0fe;
+    color: #4a76a8;
+}
+
+.role-admin {
+    background-color: #fce8e8;
+    color: #c0392b;
+}
+
+/* Секция запроса роли */
+.role-request-section {
+    margin-bottom: 30px;
+}
+
+.role-request-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 25px;
+    border-left: 4px solid #4a76a8;
+}
+
+.role-request-card p {
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.request-pending,
+.request-rejected {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+.request-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.request-rejected {
+    background: #f8d7da;
+    color: #721c24;
+}

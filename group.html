@@ -23,6 +23,17 @@
             align-items: center;
             padding: 0 20px;
             gap: 20px;
+            justify-content: space-between;
+        }
+
+        .tabs-left {
+            display: flex;
+            gap: 20px;
+        }
+
+        .tabs-right {
+            display: flex;
+            gap: 10px;
         }
 
         .main-tab {
@@ -45,6 +56,35 @@
             border-bottom-color: white;
         }
 
+        /* Кнопки управления */
+        .btn-manage {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .btn-manage:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #e74c3c;
+            color: white;
+            font-size: 11px;
+            padding: 2px 5px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
         /* Панель с листами */
         .sheets-panel {
             height: 40px;
@@ -61,6 +101,7 @@
             display: flex;
             gap: 2px;
             flex: 1;
+            overflow-x: auto;
         }
 
         .sheet-tab {
@@ -76,6 +117,7 @@
             align-items: center;
             gap: 10px;
             position: relative;
+            white-space: nowrap;
         }
 
         .sheet-tab:hover {
@@ -86,6 +128,15 @@
             background: white;
             color: #217346;
             font-weight: 500;
+        }
+
+        .sheet-name {
+            cursor: text;
+        }
+
+        .sheet-name:hover {
+            text-decoration: underline;
+            text-decoration-style: dotted;
         }
 
         .sheet-close {
@@ -184,35 +235,115 @@
             display: block;
         }
 
-        /* Таблица оценок */
-        .grades-table {
-            border-collapse: collapse;
+        /* Контейнер для листов */
+        .sheets-container {
             width: 100%;
+            height: 100%;
+            position: relative;
         }
 
-        .grades-table th,
-        .grades-table td {
+        .sheet-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: auto;
+            display: none;
+        }
+
+        .sheet-content.active {
+            display: block;
+        }
+
+        /* Таблица оценок */
+        .excel-table {
+            border-collapse: collapse;
+        }
+
+        .excel-table th,
+        .excel-table td {
             border: 1px solid #d0d0d0;
-            padding: 8px;
+            min-width: 80px;
+            height: 30px;
             text-align: center;
+            position: relative;
         }
 
-        .grades-table th {
+        .excel-table th {
             background: #f5f5f5;
             font-weight: 500;
+            position: sticky;
+            z-index: 10;
         }
 
-        .grades-table td input {
+        .excel-table thead th {
+            top: 0;
+        }
+
+        .excel-table tbody th {
+            left: 0;
+            background: #f5f5f5;
+        }
+
+        .excel-table thead th:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 11;
+            background: #e0e0e0;
+        }
+
+        .excel-table td input {
             width: 100%;
+            height: 100%;
             border: none;
             padding: 4px;
             background: transparent;
             text-align: center;
         }
 
-        .grades-table td input:focus {
+        .excel-table td input:focus {
             outline: 2px solid #217346;
             background: white;
+            z-index: 1;
+        }
+
+        /* Кнопки добавления строк/столбцов */
+        .add-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .add-btn {
+            padding: 10px 15px;
+            background: #217346;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .add-btn:hover {
+            background: #1a5c37;
+        }
+
+        .import-btn {
+            background: #4a76a8;
+        }
+
+        .import-btn:hover {
+            background: #3a5f88;
+        }
+
+        /* Скрытый input для импорта */
+        .file-input-hidden {
+            display: none;
         }
 
         /* Таблица расписания */
@@ -232,11 +363,15 @@
             border: 1px solid #d0d0d0;
             padding: 8px;
             text-align: center;
+            position: relative;
         }
 
         .schedule-table th {
             background: #f8f8f8;
             font-weight: 500;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         .schedule-table th.time-header {
@@ -250,11 +385,13 @@
             color: #4a76a8;
             font-size: 16px;
             padding: 12px;
+            min-width: 150px;
         }
 
         .schedule-table td.time-cell {
             background: #f5f5f5;
             padding: 4px;
+            vertical-align: middle;
         }
 
         .time-input {
@@ -280,6 +417,8 @@
             min-height: 60px;
             resize: none;
             font-family: inherit;
+            overflow: hidden;
+            line-height: 1.4;
         }
 
         .schedule-table td textarea:focus {
@@ -287,7 +426,148 @@
             background: #f0f7ff;
         }
 
-        /* Кнопки управления строками */
+        /* Стили для недель */
+        .week-content {
+            display: none;
+        }
+
+        .week-content.active {
+            display: block;
+        }
+
+        /* Модальные окна */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        /* Запросы на вступление */
+        .request-item {
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .request-info h4 {
+            margin: 0 0 5px 0;
+        }
+
+        .request-info p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .request-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-accept {
+            padding: 6px 12px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-reject {
+            padding: 6px 12px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Управление правами */
+        .member-item {
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .member-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .member-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #4a76a8;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .permission-select {
+            padding: 6px 12px;
+            border: 1px solid #d0d0d0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
         .row-controls {
             text-align: center;
             padding: 10px;
@@ -324,15 +604,6 @@
 
         .schedule-table tr:hover .btn-remove-row {
             opacity: 1;
-        }
-
-        /* Разные недели */
-        .week-content {
-            display: none;
-        }
-
-        .week-content.active {
-            display: block;
         }
     </style>
 </head>
@@ -392,8 +663,6 @@
         </div>
 
         <div class="header-actions">
-            <button class="header-btn" id="saveBtn">Сохранить</button>
-            <button class="header-btn" id="exportBtn">Экспорт</button>
             <button class="header-btn profile-btn" id="profileBtn">
                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -407,18 +676,27 @@
     <div class="excel-container">
         <!-- Основные вкладки -->
         <div class="main-tabs-panel">
-            <button class="main-tab active" data-type="grades">Оценки</button>
-            <button class="main-tab" data-type="schedule">Расписание</button>
+            <div class="tabs-left">
+                <button class="main-tab active" data-type="grades">Оценки</button>
+                <button class="main-tab" data-type="schedule">Расписание</button>
+            </div>
+            <div class="tabs-right">
+                <button class="btn-manage" id="requestsBtn">
+                    Заявки
+                    <span class="badge" id="requestsBadge" style="display:none;">0</span>
+                </button>
+                <button class="btn-manage" id="membersBtn">Участники</button>
+            </div>
         </div>
 
         <!-- Панель с листами -->
         <div class="sheets-panel" id="sheetsPanel">
-            <div class="sheets-left">
-                <div class="sheet-tab active" data-sheet="0">
-                    <span>Основная</span>
+            <div class="sheets-left" id="sheetTabs">
+                <div class="sheet-tab active" data-sheet-id="sheet-0">
+                    <span class="sheet-name" onclick="editSheetName(this)">Лист 1</span>
                     <button class="sheet-close">×</button>
                 </div>
-                <button class="add-tab-btn">+</button>
+                <button class="add-tab-btn" id="addTabBtn">+</button>
             </div>
 
             <!-- Переключатель недель (скрыт для оценок) -->
@@ -434,228 +712,470 @@
         <div class="tables-container">
             <!-- Таблица оценок -->
             <div class="table-area active" data-type="grades">
-                <table class="grades-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 40px;"></th>
-                            <th>A</th>
-                            <th>B</th>
-                            <th>C</th>
-                            <th>D</th>
-                            <th>E</th>
-                            <th>F</th>
-                            <th>G</th>
-                            <th>H</th>
-                            <th>I</th>
-                            <th>J</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th>1</th>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                        </tr>
-                        <tr>
-                            <th>2</th>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                        </tr>
-                        <tr>
-                            <th>3</th>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="sheets-container" id="gradesContainer">
+                    <!-- Листы оценок будут здесь -->
+                </div>
+                <div class="add-controls">
+                    <button class="add-btn" onclick="addRows()">+ Добавить строки</button>
+                    <button class="add-btn" onclick="addColumns()">+ Добавить столбцы</button>
+                    <button class="add-btn import-btn" onclick="importExcel()">📥 Импорт Excel</button>
+                </div>
+                <input type="file" id="excelFileInput" class="file-input-hidden" accept=".xlsx,.xls,.csv">
             </div>
 
             <!-- Таблица расписания -->
             <div class="table-area" data-type="schedule">
-                <div class="schedule-wrapper">
-                    <!-- Верхняя неделя -->
-                    <div class="week-content active" id="topWeek">
-                        <table class="schedule-table">
-                            <thead>
-                                <tr>
-                                    <th class="time-header">Время</th>
-                                    <th class="day-header">Понедельник</th>
-                                    <th class="day-header">Вторник</th>
-                                    <th class="day-header">Среда</th>
-                                    <th class="day-header">Четверг</th>
-                                    <th class="day-header">Пятница</th>
-                                    <th class="day-header">Суббота</th>
-                                    <th style="width: 30px;"></th>
-                                </tr>
-                            </thead>
-                            <tbody id="topWeekBody">
-                                <tr>
-                                    <td class="time-cell"><input type="text" class="time-input" value="8:00 - 9:30">
-                                    </td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><button class="btn-remove-row" onclick="removeRow(this)">×</button></td>
-                                </tr>
-                                <tr>
-                                    <td class="time-cell"><input type="text" class="time-input" value="9:40 - 11:10">
-                                    </td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><button class="btn-remove-row" onclick="removeRow(this)">×</button></td>
-                                </tr>
-                                <tr>
-                                    <td class="time-cell"><input type="text" class="time-input" value="11:20 - 12:50">
-                                    </td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><button class="btn-remove-row" onclick="removeRow(this)">×</button></td>
-                                </tr>
-                                <tr>
-                                    <td class="time-cell"><input type="text" class="time-input" value="13:00 - 14:30">
-                                    </td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><button class="btn-remove-row" onclick="removeRow(this)">×</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="row-controls">
-                            <button class="btn-add-row" onclick="addRow('topWeekBody')">+ Добавить пару</button>
-                        </div>
-                    </div>
-
-                    <!-- Нижняя неделя -->
-                    <div class="week-content" id="bottomWeek">
-                        <table class="schedule-table">
-                            <thead>
-                                <tr>
-                                    <th class="time-header">Время</th>
-                                    <th class="day-header">Понедельник</th>
-                                    <th class="day-header">Вторник</th>
-                                    <th class="day-header">Среда</th>
-                                    <th class="day-header">Четверг</th>
-                                    <th class="day-header">Пятница</th>
-                                    <th class="day-header">Суббота</th>
-                                    <th style="width: 30px;"></th>
-                                </tr>
-                            </thead>
-                            <tbody id="bottomWeekBody">
-                                <tr>
-                                    <td class="time-cell"><input type="text" class="time-input" value="8:00 - 9:30">
-                                    </td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><button class="btn-remove-row" onclick="removeRow(this)">×</button></td>
-                                </tr>
-                                <tr>
-                                    <td class="time-cell"><input type="text" class="time-input" value="9:40 - 11:10">
-                                    </td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><button class="btn-remove-row" onclick="removeRow(this)">×</button></td>
-                                </tr>
-                                <tr>
-                                    <td class="time-cell"><input type="text" class="time-input" value="11:20 - 12:50">
-                                    </td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><button class="btn-remove-row" onclick="removeRow(this)">×</button></td>
-                                </tr>
-                                <tr>
-                                    <td class="time-cell"><input type="text" class="time-input" value="13:00 - 14:30">
-                                    </td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><textarea placeholder="Предмет"></textarea></td>
-                                    <td><button class="btn-remove-row" onclick="removeRow(this)">×</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="row-controls">
-                            <button class="btn-add-row" onclick="addRow('bottomWeekBody')">+ Добавить пару</button>
-                        </div>
-                    </div>
+                <div class="sheets-container" id="scheduleContainer">
+                    <!-- Листы расписания будут здесь -->
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Модальное окно заявок -->
+    <div class="modal" id="requestsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Заявки на вступление в группу</h3>
+                <button class="close-modal" onclick="closeModal('requestsModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="empty-state">
+                    <p>Нет новых заявок</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно управления участниками -->
+    <div class="modal" id="membersModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Управление участниками</h3>
+                <button class="close-modal" onclick="closeModal('membersModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="empty-state">
+                    <p>Список участников пуст</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подключаем SheetJS для работы с Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
     <script>
+        // Глобальные переменные
+        let sheets = {
+            grades: {},
+            schedule: {}
+        };
+        let currentType = 'grades';
+        let currentSheetId = 'sheet-0';
         let sheetCounter = 1;
 
-        // Функции для работы с расписанием
-        function addRow(tableId) {
-            const tbody = document.getElementById(tableId);
+        // Размеры таблицы по умолчанию
+        const DEFAULT_ROWS = 50;
+        const DEFAULT_COLS = 26;
+
+        // Функция импорта Excel
+        function importExcel() {
+            document.getElementById('excelFileInput').click();
+        }
+
+        // Обработка импорта файла
+        document.getElementById('excelFileInput').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+
+                    // Берем первый лист
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+
+                    // Конвертируем в массив массивов
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+                    // Заполняем текущую таблицу
+                    fillTableWithData(jsonData);
+
+                    alert('Excel файл успешно импортирован!');
+                } catch (error) {
+                    alert('Ошибка при чтении файла: ' + error.message);
+                }
+            };
+
+            reader.readAsArrayBuffer(file);
+
+            // Очищаем input для возможности повторного выбора того же файла
+            e.target.value = '';
+        });
+
+        // Заполнение таблицы данными из Excel
+        function fillTableWithData(data) {
+            const activeSheet = document.querySelector('.sheet-content.active');
+            if (!activeSheet) return;
+
+            const inputs = activeSheet.querySelectorAll('td input');
+            let cellIndex = 0;
+
+            // Проходим по данным и заполняем ячейки
+            for (let row = 0; row < data.length && row < DEFAULT_ROWS; row++) {
+                for (let col = 0; col < data[row].length && col < DEFAULT_COLS; col++) {
+                    const targetRow = row;
+                    const targetCol = col;
+                    const inputSelector = `input[data-cell="${currentSheetId}-${targetRow}-${targetCol}"]`;
+                    const input = activeSheet.querySelector(inputSelector);
+
+                    if (input && data[row][col] !== undefined) {
+                        input.value = data[row][col];
+                        // Сохраняем в память
+                        const cellId = `${currentSheetId}-${targetRow}-${targetCol}`;
+                        if (!sheets.grades[currentSheetId].data) {
+                            sheets.grades[currentSheetId].data = {};
+                        }
+                        sheets.grades[currentSheetId].data[cellId] = data[row][col];
+                    }
+                }
+            }
+        }
+
+        // Функция создания пустой таблицы оценок
+        function createGradesSheet(sheetId) {
+            const container = document.createElement('div');
+            container.className = 'sheet-content';
+            container.dataset.sheetId = sheetId;
+
+            let html = '<table class="excel-table"><thead><tr><th></th>';
+
+            // Заголовки столбцов
+            for (let c = 0; c < DEFAULT_COLS; c++) {
+                html += `<th>${String.fromCharCode(65 + c)}</th>`;
+            }
+            html += '</tr></thead><tbody>';
+
+            // Строки
+            for (let r = 0; r < DEFAULT_ROWS; r++) {
+                html += `<tr><th>${r + 1}</th>`;
+                for (let c = 0; c < DEFAULT_COLS; c++) {
+                    const cellId = `${sheetId}-${r}-${c}`;
+                    html += `<td><input type="text" data-cell="${cellId}"></td>`;
+                }
+                html += '</tr>';
+            }
+            html += '</tbody></table>';
+
+            container.innerHTML = html;
+            return container;
+        }
+
+        // Функция создания таблицы расписания
+        function createScheduleSheet(sheetId) {
+            const container = document.createElement('div');
+            container.className = 'sheet-content';
+            container.dataset.sheetId = sheetId;
+
+            let html = `
+                <div class="schedule-wrapper">
+                    <!-- Верхняя неделя -->
+                    <div class="week-content active" data-week="top" data-sheet="${sheetId}">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th class="time-header">Время</th>
+                                    <th class="day-header">Понедельник</th>
+                                    <th class="day-header">Вторник</th>
+                                    <th class="day-header">Среда</th>
+                                    <th class="day-header">Четверг</th>
+                                    <th class="day-header">Пятница</th>
+                                    <th class="day-header">Суббота</th>
+                                    <th style="width: 30px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+
+            for (let i = 0; i < 4; i++) {
+                html += `
+                    <tr>
+                        <td class="time-cell"><input type="text" class="time-input" placeholder="00:00 - 00:00"></td>
+                        <td><textarea placeholder="Предмет" class="auto-resize"></textarea></td>
+                        <td><textarea placeholder="Предмет" class="auto-resize"></textarea></td>
+                        <td><textarea placeholder="Предмет" class="auto-resize"></textarea></td>
+                        <td><textarea placeholder="Предмет" class="auto-resize"></textarea></td>
+                        <td><textarea placeholder="Предмет" class="auto-resize"></textarea></td>
+                        <td><textarea placeholder="Предмет" class="auto-resize"></textarea></td>
+                        <td><button class="btn-remove-row" onclick="removeScheduleRow(this)">×</button></td>
+                    </tr>`;
+            }
+
+            html += `
+                            </tbody>
+                        </table>
+                        <div class="row-controls">
+                            <button class="btn-add-row" onclick="addScheduleRow(this, 'top')">+ Добавить пару</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Нижняя неделя -->
+                    <div class="week-content" data-week="bottom" data-sheet="${sheetId}">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th class="time-header">Время</th>
+                                    <th class="day-header">Понедельник</th>
+                                    <th class="day-header">Вторник</th>
+                                    <th class="day-header">Среда</th>
+                                    <th class="day-header">Четверг</th>
+                                    <th class="day-header">Пятница</th>
+                                    <th class="day-header">Суббота</th>
+                                    <th style="width: 30px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+
+            for (let i = 0; i < 4; i++) {
+                html += `
+                    <tr>
+                        <td class="time-cell"><input type="text" class="time-input" placeholder="00:00 - 00:00"></td>
+                        <td><textarea placeholder="Предмет" class="auto-resize"></textarea></td>
+                        <td><textarea placeholder="Предмет" class="auto-resize"></textarea></td>
+                        <td><textarea placeholder="Предмет" class="auto-resize"></textarea></td>
+                        <td><textarea placeholder="Предмет" class="auto-resize"></textarea></td>
+                        <td><textarea placeholder="Предмет" class="auto-resize"></textarea></td>
+                        <td><textarea placeholder="Предмет" class="auto-resize"></textarea></td>
+                        <td><button class="btn-remove-row" onclick="removeScheduleRow(this)">×</button></td>
+                    </tr>`;
+            }
+
+            html += `
+                            </tbody>
+                        </table>
+                        <div class="row-controls">
+                            <button class="btn-add-row" onclick="addScheduleRow(this, 'bottom')">+ Добавить пару</button>
+                        </div>
+                    </div>
+                </div>`;
+
+            container.innerHTML = html;
+            return container;
+        }
+
+        // Инициализация первого листа
+        function initializeSheets() {
+            // Создаем первый лист для оценок
+            const gradesContainer = document.getElementById('gradesContainer');
+            const firstGradesSheet = createGradesSheet('sheet-0');
+            firstGradesSheet.classList.add('active');
+            gradesContainer.appendChild(firstGradesSheet);
+
+            // Сохраняем данные листа
+            sheets.grades['sheet-0'] = {
+                name: 'Лист 1',
+                data: {}
+            };
+        }
+
+        // Переключение листов
+        function switchSheet(sheetId) {
+            // Скрываем все листы
+            document.querySelectorAll('.sheet-content').forEach(sheet => {
+                sheet.classList.remove('active');
+            });
+
+            // Показываем нужный лист
+            const targetSheet = document.querySelector(`.sheet-content[data-sheet-id="${sheetId}"]`);
+            if (targetSheet) {
+                targetSheet.classList.add('active');
+            }
+
+            // Обновляем активную вкладку
+            document.querySelectorAll('.sheet-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.sheetId === sheetId);
+            });
+
+            currentSheetId = sheetId;
+
+            // Если это расписание, проверяем какая неделя активна
+            if (currentType === 'schedule') {
+                updateWeekVisibility();
+            }
+        }
+
+        // Обновление видимости недель
+        function updateWeekVisibility() {
+            const activeSheet = document.querySelector('.sheet-content.active');
+            if (!activeSheet) return;
+
+            const isTopWeek = document.getElementById('weekTop').checked;
+            activeSheet.querySelectorAll('.week-content').forEach(week => {
+                if (isTopWeek) {
+                    week.classList.toggle('active', week.dataset.week === 'top');
+                } else {
+                    week.classList.toggle('active', week.dataset.week === 'bottom');
+                }
+            });
+        }
+
+        // Добавление нового листа
+        function addNewSheet() {
+            const newSheetId = `sheet-${sheetCounter}`;
+            const newSheetName = `Лист ${sheetCounter + 1}`;
+            sheetCounter++;
+
+            // Создаем вкладку
+            const tabsContainer = document.getElementById('sheetTabs');
+            const newTab = document.createElement('div');
+            newTab.className = 'sheet-tab';
+            newTab.dataset.sheetId = newSheetId;
+            newTab.innerHTML = `
+                <span class="sheet-name" onclick="editSheetName(this)">${newSheetName}</span>
+                <button class="sheet-close">×</button>
+            `;
+
+            tabsContainer.insertBefore(newTab, document.getElementById('addTabBtn'));
+
+            // Создаем контент листа
+            if (currentType === 'grades') {
+                const container = document.getElementById('gradesContainer');
+                const newSheet = createGradesSheet(newSheetId);
+                container.appendChild(newSheet);
+
+                sheets.grades[newSheetId] = {
+                    name: newSheetName,
+                    data: {}
+                };
+            } else if (currentType === 'schedule') {
+                const container = document.getElementById('scheduleContainer');
+                const newSheet = createScheduleSheet(newSheetId);
+                container.appendChild(newSheet);
+
+                sheets.schedule[newSheetId] = {
+                    name: newSheetName,
+                    data: {}
+                };
+            }
+
+            // Переключаемся на новый лист
+            switchSheet(newSheetId);
+        }
+
+        // Редактирование названия листа
+        function editSheetName(element) {
+            const currentName = element.textContent;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentName;
+            input.style.width = '100px';
+            input.style.padding = '2px 5px';
+            input.style.border = '1px solid #4a76a8';
+            input.style.borderRadius = '3px';
+
+            element.replaceWith(input);
+            input.focus();
+            input.select();
+
+            function saveName() {
+                const newName = input.value.trim() || currentName;
+                const span = document.createElement('span');
+                span.className = 'sheet-name';
+                span.textContent = newName;
+                span.onclick = function () { editSheetName(this); };
+                input.replaceWith(span);
+
+                // Сохраняем название в данных
+                const sheetTab = span.closest('.sheet-tab');
+                const sheetId = sheetTab.dataset.sheetId;
+                if (sheets[currentType][sheetId]) {
+                    sheets[currentType][sheetId].name = newName;
+                }
+            }
+
+            input.onblur = saveName;
+            input.onkeypress = function (e) {
+                if (e.key === 'Enter') {
+                    saveName();
+                }
+            };
+        }
+
+        // Добавление строк
+        function addRows() {
+            const activeSheet = document.querySelector('.sheet-content.active .excel-table tbody');
+            if (!activeSheet) return;
+
+            const currentCols = activeSheet.querySelector('tr').children.length - 1;
+
+            for (let i = 0; i < 10; i++) {
+                const newRow = document.createElement('tr');
+                const rowNum = activeSheet.children.length + 1;
+                newRow.innerHTML = `<th>${rowNum}</th>`;
+
+                for (let c = 0; c < currentCols; c++) {
+                    const cellId = `${currentSheetId}-${rowNum - 1}-${c}`;
+                    newRow.innerHTML += `<td><input type="text" data-cell="${cellId}"></td>`;
+                }
+
+                activeSheet.appendChild(newRow);
+            }
+        }
+
+        // Добавление столбцов
+        function addColumns() {
+            const activeSheet = document.querySelector('.sheet-content.active .excel-table');
+            if (!activeSheet) return;
+
+            // Добавляем заголовки
+            const thead = activeSheet.querySelector('thead tr');
+            const currentCols = thead.children.length - 1;
+
+            for (let i = 0; i < 5; i++) {
+                const th = document.createElement('th');
+                th.textContent = String.fromCharCode(65 + currentCols + i);
+                thead.appendChild(th);
+            }
+
+            // Добавляем ячейки в каждую строку
+            activeSheet.querySelectorAll('tbody tr').forEach((row, rowIndex) => {
+                for (let i = 0; i < 5; i++) {
+                    const td = document.createElement('td');
+                    const cellId = `${currentSheetId}-${rowIndex}-${currentCols + i}`;
+                    td.innerHTML = `<input type="text" data-cell="${cellId}">`;
+                    row.appendChild(td);
+                }
+            });
+        }
+
+        // Функции для расписания
+        function addScheduleRow(btn, week) {
+            const tbody = btn.closest('.week-content').querySelector('tbody');
             const newRow = document.createElement('tr');
             newRow.innerHTML = `
                 <td class="time-cell"><input type="text" class="time-input" placeholder="00:00 - 00:00"></td>
-                <td><textarea placeholder="Предмет"></textarea></td>
-                <td><textarea placeholder="Предмет"></textarea></td>
-                <td><textarea placeholder="Предмет"></textarea></td>
-                <td><textarea placeholder="Предмет"></textarea></td>
-                <td><textarea placeholder="Предмет"></textarea></td>
-                <td><textarea placeholder="Предмет"></textarea></td>
-                <td><button class="btn-remove-row" onclick="removeRow(this)">×</button></td>
+                <td><textarea placeholder="Предмет" class="auto-resize"></textarea></td>
+                <td><textarea placeholder="Предмет" class="auto-resize"></textarea></td>
+                <td><textarea placeholder="Предмет" class="auto-resize"></textarea></td>
+                <td><textarea placeholder="Предмет" class="auto-resize"></textarea></td>
+                <td><textarea placeholder="Предмет" class="auto-resize"></textarea></td>
+                <td><textarea placeholder="Предмет" class="auto-resize"></textarea></td>
+                <td><button class="btn-remove-row" onclick="removeScheduleRow(this)">×</button></td>
             `;
             tbody.appendChild(newRow);
+
+            // Инициализация автоизменения размера
+            newRow.querySelectorAll('.auto-resize').forEach(textarea => {
+                textarea.addEventListener('input', function () {
+                    autoResize(this);
+                });
+            });
         }
 
-        function removeRow(btn) {
+        function removeScheduleRow(btn) {
             const row = btn.closest('tr');
             const tbody = row.parentElement;
             if (tbody.children.length > 1) {
@@ -665,118 +1185,193 @@
             }
         }
 
-        // Переключение основных вкладок (Оценки/Расписание)
-        document.querySelectorAll('.main-tab').forEach(tab => {
-            tab.addEventListener('click', function () {
-                // Активируем вкладку
-                document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
+        }
 
-                // Показываем соответствующую таблицу
-                const type = this.dataset.type;
-                document.querySelectorAll('.table-area').forEach(area => {
-                    area.classList.remove('active');
-                    if (area.dataset.type === type) {
-                        area.classList.add('active');
+        // Обработчики событий
+        document.addEventListener('DOMContentLoaded', function () {
+            // Инициализация
+            initializeSheets();
+
+            // Добавление листа
+            document.getElementById('addTabBtn').addEventListener('click', addNewSheet);
+
+            // Переключение листов
+            document.addEventListener('click', function (e) {
+                if (e.target.classList.contains('sheet-tab') || e.target.parentElement.classList.contains('sheet-tab')) {
+                    const tab = e.target.closest('.sheet-tab');
+                    if (tab && !e.target.classList.contains('sheet-close') && !e.target.classList.contains('sheet-name')) {
+                        switchSheet(tab.dataset.sheetId);
+                    }
+                }
+
+                // Удаление листа
+                if (e.target.classList.contains('sheet-close')) {
+                    e.stopPropagation();
+
+                    const sheetsCount = document.querySelectorAll('.sheet-tab').length;
+                    if (sheetsCount <= 1) {
+                        alert('Нельзя удалить последний лист');
+                        return;
+                    }
+
+                    const tab = e.target.parentElement;
+                    const sheetId = tab.dataset.sheetId;
+
+                    // Удаляем вкладку
+                    tab.remove();
+
+                    // Удаляем контент
+                    const sheetContent = document.querySelector(`.sheet-content[data-sheet-id="${sheetId}"]`);
+                    if (sheetContent) sheetContent.remove();
+
+                    // Удаляем данные
+                    delete sheets[currentType][sheetId];
+
+                    // Переключаемся на первый лист
+                    const firstTab = document.querySelector('.sheet-tab');
+                    if (firstTab) {
+                        switchSheet(firstTab.dataset.sheetId);
+                    }
+                }
+            });
+
+            // Переключение основных вкладок
+            document.querySelectorAll('.main-tab').forEach(tab => {
+                tab.addEventListener('click', function () {
+                    document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+
+                    currentType = this.dataset.type;
+
+                    document.querySelectorAll('.table-area').forEach(area => {
+                        area.classList.toggle('active', area.dataset.type === currentType);
+                    });
+
+                    // Переключатель недель
+                    const weekSwitcher = document.getElementById('weekSwitcher');
+                    weekSwitcher.classList.toggle('hidden', currentType !== 'schedule');
+
+                    // Обновляем листы для нового типа
+                    updateSheetTabs();
+                });
+            });
+
+            // Переключение недель
+            document.querySelectorAll('.week-radio').forEach(radio => {
+                radio.addEventListener('change', function () {
+                    if (this.checked) {
+                        updateWeekVisibility();
                     }
                 });
+            });
 
-                // Показываем/скрываем переключатель недель
-                const weekSwitcher = document.getElementById('weekSwitcher');
-                if (type === 'schedule') {
-                    weekSwitcher.classList.remove('hidden');
-                } else {
-                    weekSwitcher.classList.add('hidden');
-                }
+            // Модальные окна
+            document.getElementById('requestsBtn').addEventListener('click', () => {
+                document.getElementById('requestsModal').classList.add('active');
+            });
+
+            document.getElementById('membersBtn').addEventListener('click', () => {
+                document.getElementById('membersModal').classList.add('active');
+            });
+
+            // Боковое меню
+            document.getElementById('menuBtn').addEventListener('click', function () {
+                document.getElementById('sidebar').classList.add('active');
+                document.getElementById('overlay').classList.add('active');
+            });
+
+            document.getElementById('closeBtn').addEventListener('click', function () {
+                document.getElementById('sidebar').classList.remove('active');
+                document.getElementById('overlay').classList.remove('active');
+            });
+
+            document.getElementById('overlay').addEventListener('click', function () {
+                document.getElementById('sidebar').classList.remove('active');
+                document.getElementById('overlay').classList.remove('active');
             });
         });
 
-        // Переключение недель
-        document.getElementById('weekTop').addEventListener('change', function () {
-            if (this.checked) {
-                document.getElementById('topWeek').classList.add('active');
-                document.getElementById('bottomWeek').classList.remove('active');
+        // Обновление вкладок при смене типа
+        function updateSheetTabs() {
+            const tabsContainer = document.getElementById('sheetTabs');
+            const addBtn = document.getElementById('addTabBtn');
+
+            // Очищаем вкладки
+            while (tabsContainer.firstChild) {
+                tabsContainer.removeChild(tabsContainer.firstChild);
             }
-        });
 
-        document.getElementById('weekBottom').addEventListener('change', function () {
-            if (this.checked) {
-                document.getElementById('bottomWeek').classList.add('active');
-                document.getElementById('topWeek').classList.remove('active');
+            // Если для этого типа нет листов, создаем первый
+            if (!sheets[currentType] || Object.keys(sheets[currentType]).length === 0) {
+                sheets[currentType] = {};
+                const firstSheetId = `${currentType}-sheet-0`;
+                sheets[currentType][firstSheetId] = {
+                    name: 'Лист 1',
+                    data: {}
+                };
+
+                // Создаем контент
+                if (currentType === 'grades') {
+                    const container = document.getElementById('gradesContainer');
+                    container.innerHTML = '';
+                    const sheet = createGradesSheet(firstSheetId);
+                    sheet.classList.add('active');
+                    container.appendChild(sheet);
+                } else if (currentType === 'schedule') {
+                    const container = document.getElementById('scheduleContainer');
+                    if (container.children.length === 0) {
+                        const sheet = createScheduleSheet(firstSheetId);
+                        sheet.classList.add('active');
+                        container.appendChild(sheet);
+                    }
+                }
             }
-        });
 
-        // Добавление нового листа
-        document.querySelector('.add-tab-btn').addEventListener('click', function () {
-            const sheetsLeft = document.querySelector('.sheets-left');
-            sheetCounter++;
+            // Создаем вкладки для текущего типа
+            let hasActive = false;
+            Object.keys(sheets[currentType]).forEach(sheetId => {
+                const sheet = sheets[currentType][sheetId];
+                const tab = document.createElement('div');
+                tab.className = 'sheet-tab';
+                tab.dataset.sheetId = sheetId;
 
-            const newTab = document.createElement('div');
-            newTab.className = 'sheet-tab';
-            newTab.dataset.sheet = sheetCounter;
-            newTab.innerHTML = `
-                <span>Лист ${sheetCounter}</span>
-                <button class="sheet-close">×</button>
-            `;
-
-            sheetsLeft.insertBefore(newTab, this);
-
-            // Сразу делаем новую вкладку активной
-            document.querySelectorAll('.sheet-tab').forEach(t => t.classList.remove('active'));
-            newTab.classList.add('active');
-        });
-
-        // Переключение листов
-        document.addEventListener('click', function (e) {
-            if (e.target.classList.contains('sheet-tab') || e.target.parentElement.classList.contains('sheet-tab')) {
-                const tab = e.target.classList.contains('sheet-tab') ? e.target : e.target.parentElement;
-
-                // Если кликнули не на кнопку закрытия
-                if (!e.target.classList.contains('sheet-close')) {
-                    document.querySelectorAll('.sheet-tab').forEach(t => t.classList.remove('active'));
+                if (!hasActive) {
                     tab.classList.add('active');
+                    currentSheetId = sheetId;
+                    hasActive = true;
                 }
+
+                tab.innerHTML = `
+                    <span class="sheet-name" onclick="editSheetName(this)">${sheet.name}</span>
+                    <button class="sheet-close">×</button>
+                `;
+
+                tabsContainer.appendChild(tab);
+            });
+
+            // Добавляем кнопку добавления
+            tabsContainer.appendChild(addBtn);
+
+            // Показываем правильный контент
+            if (hasActive) {
+                switchSheet(currentSheetId);
             }
-        });
+        }
 
-        // Удаление листа
-        document.addEventListener('click', function (e) {
-            if (e.target.classList.contains('sheet-close')) {
-                e.stopPropagation();
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
 
-                const sheetsCount = document.querySelectorAll('.sheet-tab').length;
-                if (sheetsCount <= 1) {
-                    alert('Нельзя удалить последний лист');
-                    return;
+        // Закрытие модальных окон при клике вне
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function (e) {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
                 }
-
-                const tab = e.target.parentElement;
-                const wasActive = tab.classList.contains('active');
-
-                // Удаляем вкладку
-                tab.remove();
-
-                // Если удалили активную вкладку, делаем активной первую
-                if (wasActive) {
-                    document.querySelector('.sheet-tab').classList.add('active');
-                }
-            }
-        });
-
-        // Боковое меню
-        document.getElementById('menuBtn').addEventListener('click', function () {
-            document.getElementById('sidebar').classList.add('active');
-            document.getElementById('overlay').classList.add('active');
-        });
-
-        document.getElementById('closeBtn').addEventListener('click', function () {
-            document.getElementById('sidebar').classList.remove('active');
-            document.getElementById('overlay').classList.remove('active');
-        });
-
-        document.getElementById('overlay').addEventListener('click', function () {
-            document.getElementById('sidebar').classList.remove('active');
-            document.getElementById('overlay').classList.remove('active');
+            });
         });
     </script>
 </body>
