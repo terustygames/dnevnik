@@ -10,6 +10,7 @@ if (!groupId) window.location.href = 'groups.html';
 
 // ========== СОСТОЯНИЕ ==========
 let currentUser = null;
+let currentUserRole = 'user';
 let currentGroup = null;
 let tabs = [];
 let currentTab = null;
@@ -41,13 +42,20 @@ function colName(index) {
 }
 
 // ========== САЙДБАР ==========
-$('menuBtn').onclick = () => {
-    $('sidebar').classList.add('active');
-    $('overlay').classList.add('active');
-};
+if ($('menuBtn')) {
+    $('menuBtn').onclick = () => {
+        $('sidebar').classList.add('active');
+        $('overlay').classList.add('active');
+    };
+}
 
-$('closeBtn').onclick = closeSidebar;
-$('overlay').onclick = closeSidebar;
+if ($('closeBtn')) {
+    $('closeBtn').onclick = closeSidebar;
+}
+
+if ($('overlay')) {
+    $('overlay').onclick = closeSidebar;
+}
 
 function closeSidebar() {
     $('sidebar').classList.remove('active');
@@ -106,6 +114,8 @@ async function loadTableData(tabId) {
 
 // ========== РЕНДЕР ==========
 function renderTabs() {
+    if (!$('tabsList')) return;
+
     $('tabsList').innerHTML = tabs.map(tab => `
         <button class="tab ${tab.id === currentTab ? 'active' : ''}" data-id="${tab.id}">
             <span>${tab.name}</span>
@@ -126,6 +136,8 @@ function renderTabs() {
 }
 
 function renderTable() {
+    if (!$('excel')) return;
+
     let html = '<thead><tr><th class="corner"></th>';
 
     // Заголовки столбцов (A, B, C...)
@@ -162,6 +174,13 @@ function escapeHtml(text) {
 
 function attachCellHandlers() {
     document.querySelectorAll('.excel input').forEach(input => {
+        // Делаем поля только для чтения для обычных пользователей
+        if (currentUserRole === 'user') {
+            input.readOnly = true;
+            input.style.cursor = 'not-allowed';
+            input.style.backgroundColor = '#f5f5f5';
+        }
+
         // При фокусе подсвечиваем строку
         input.onfocus = () => {
             document.querySelectorAll('.selected').forEach(el => el.classList.remove('selected'));
@@ -173,8 +192,12 @@ function attachCellHandlers() {
             tr.classList.add('selected');
         };
 
-        // При изменении сохраняем
+        // При изменении сохраняем (только для преподавателей)
         input.onchange = () => {
+            if (currentUserRole === 'user') {
+                toast('У вас нет прав для редактирования', 'error');
+                return;
+            }
             const key = input.dataset.key;
             const value = input.value;
             saveCell(key, value);
@@ -221,6 +244,12 @@ function moveTo(row, col) {
 
 // ========== СОХРАНЕНИЕ ==========
 async function saveCell(key, value) {
+    // Проверка роли
+    if (currentUserRole === 'user') {
+        toast('У вас нет прав для редактирования', 'error');
+        return;
+    }
+
     try {
         const cellRef = doc(db, 'groups', groupId, 'sheets', currentTab, 'cells', key);
 
@@ -237,9 +266,11 @@ async function saveCell(key, value) {
     }
 }
 
-$('saveBtn').onclick = () => {
-    toast('Данные сохраняются автоматически');
-};
+if ($('saveBtn')) {
+    $('saveBtn').onclick = () => {
+        toast('Данные сохраняются автоматически');
+    };
+}
 
 // ========== ВКЛАДКИ ==========
 async function switchTab(tabId) {
@@ -250,6 +281,12 @@ async function switchTab(tabId) {
 }
 
 async function createTab(name) {
+    // Проверка роли
+    if (currentUserRole === 'user') {
+        toast('У вас нет прав для создания листов', 'error');
+        return;
+    }
+
     try {
         const docRef = await addDoc(collection(db, 'groups', groupId, 'sheets'), {
             name,
@@ -267,6 +304,12 @@ async function createTab(name) {
 }
 
 async function deleteTab(tabId) {
+    // Проверка роли
+    if (currentUserRole === 'user') {
+        toast('У вас нет прав для удаления листов', 'error');
+        return;
+    }
+
     if (tabs.length <= 1) {
         toast('Нельзя удалить единственный лист', 'error');
         return;
@@ -298,74 +341,284 @@ async function deleteTab(tabId) {
     }
 }
 
-// Модалка
-$('addTabBtn').onclick = () => {
-    $('tabNameInput').value = '';
-    $('modal').classList.add('active');
-    $('tabNameInput').focus();
-};
+// Модалка для добавления вкладки
+if ($('addTabBtn')) {
+    $('addTabBtn').onclick = () => {
+        if (currentUserRole === 'user') {
+            toast('У вас нет прав для создания листов', 'error');
+            return;
+        }
+        $('tabNameInput').value = '';
+        $('modal').classList.add('active');
+        $('tabNameInput').focus();
+    };
+}
 
-$('cancelBtn').onclick = () => {
-    $('modal').classList.remove('active');
-};
+if ($('cancelBtn')) {
+    $('cancelBtn').onclick = () => {
+        $('modal').classList.remove('active');
+    };
+}
 
-$('confirmBtn').onclick = () => {
-    const name = $('tabNameInput').value.trim();
-    if (!name) {
-        toast('Введите название', 'error');
-        return;
-    }
-    $('modal').classList.remove('active');
-    createTab(name);
-};
+if ($('confirmBtn')) {
+    $('confirmBtn').onclick = () => {
+        const name = $('tabNameInput').value.trim();
+        if (!name) {
+            toast('Введите название', 'error');
+            return;
+        }
+        $('modal').classList.remove('active');
+        createTab(name);
+    };
+}
 
-$('tabNameInput').onkeydown = (e) => {
-    if (e.key === 'Enter') {
-        $('confirmBtn').click();
-    } else if (e.key === 'Escape') {
-        $('cancelBtn').click();
-    }
-};
+if ($('tabNameInput')) {
+    $('tabNameInput').onkeydown = (e) => {
+        if (e.key === 'Enter') {
+            $('confirmBtn').click();
+        } else if (e.key === 'Escape') {
+            $('cancelBtn').click();
+        }
+    };
+}
 
 // ========== ЭКСПОРТ ==========
-$('exportBtn').onclick = () => {
-    let csv = '';
+if ($('exportBtn')) {
+    $('exportBtn').onclick = () => {
+        let csv = '';
 
-    // Заголовки
-    csv += ',' + Array.from({ length: COLS }, (_, i) => colName(i)).join(',') + '\n';
+        // Заголовки
+        csv += ',' + Array.from({ length: COLS }, (_, i) => colName(i)).join(',') + '\n';
 
-    // Данные
-    for (let r = 0; r < ROWS; r++) {
-        const row = [r + 1];
-        for (let c = 0; c < COLS; c++) {
-            const value = tableData[`${r}_${c}`] || '';
-            row.push(`"${value.replace(/"/g, '""')}"`);
+        // Данные
+        for (let r = 0; r < ROWS; r++) {
+            const row = [r + 1];
+            for (let c = 0; c < COLS; c++) {
+                const value = tableData[`${r}_${c}`] || '';
+                row.push(`"${value.replace(/"/g, '""')}"`);
+            }
+            csv += row.join(',') + '\n';
         }
-        csv += row.join(',') + '\n';
+
+        // Скачиваем
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `${currentGroup.name}_${tabs.find(t => t.id === currentTab)?.name || 'data'}.csv`;
+        link.click();
+
+        toast('Файл скачан');
+    };
+}
+
+// ========== УЧАСТНИКИ И ЗАЯВКИ ==========
+
+// Загрузка участников группы
+async function loadMembers() {
+    try {
+        const membersSnap = await getDocs(collection(db, 'groups', groupId, 'members'));
+        const membersData = [];
+
+        for (const memberDoc of membersSnap.docs) {
+            const memberData = memberDoc.data();
+            const userDoc = await getDoc(doc(db, 'users', memberData.userId));
+
+            if (userDoc.exists()) {
+                membersData.push({
+                    id: memberDoc.id,
+                    ...memberData,
+                    userInfo: userDoc.data()
+                });
+            }
+        }
+
+        renderMembers(membersData);
+    } catch (error) {
+        console.error('Ошибка загрузки участников:', error);
+    }
+}
+
+// Отрисовка участников
+function renderMembers(members) {
+    const modalBody = document.querySelector('#membersModal .modal-body');
+
+    if (members.length === 0) {
+        modalBody.innerHTML = `
+            <div class="empty-state">
+                <p>Список участников пуст</p>
+            </div>
+        `;
+        return;
     }
 
-    // Скачиваем
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `${currentGroup.name}_${tabs.find(t => t.id === currentTab)?.name || 'data'}.csv`;
-    link.click();
+    modalBody.innerHTML = members.map(member => {
+        const initials = member.userInfo.fullName
+            ? member.userInfo.fullName.split(' ').map(w => w[0]).join('').toUpperCase().substring(0, 2)
+            : '?';
 
-    toast('Файл скачан');
+        const roleText = member.role === 'admin' ? 'Админ' : 'Участник';
+        const roleClass = member.role === 'admin' ? 'role-admin' : 'role-member';
+
+        return `
+            <div class="member-item">
+                <div class="member-info">
+                    <div class="member-avatar">${initials}</div>
+                    <div>
+                        <strong>${member.userInfo.fullName || 'Без имени'}</strong><br>
+                        <span style="color: #666; font-size: 0.9rem;">${member.userInfo.email}</span>
+                    </div>
+                </div>
+                <span class="member-role ${roleClass}">${roleText}</span>
+            </div>
+        `;
+    }).join('');
+}
+
+// Загрузка заявок на вступление
+async function loadRequests() {
+    try {
+        const requestsSnap = await getDocs(collection(db, 'groups', groupId, 'requests'));
+        const requestsData = [];
+
+        for (const requestDoc of requestsSnap.docs) {
+            const requestData = requestDoc.data();
+            if (requestData.status === 'pending') {
+                const userDoc = await getDoc(doc(db, 'users', requestData.userId));
+
+                if (userDoc.exists()) {
+                    requestsData.push({
+                        id: requestDoc.id,
+                        ...requestData,
+                        userInfo: userDoc.data()
+                    });
+                }
+            }
+        }
+
+        renderRequests(requestsData);
+
+        // Обновляем бейдж
+        const badge = document.getElementById('requestsBadge');
+        if (requestsData.length > 0) {
+            badge.textContent = requestsData.length;
+            badge.style.display = 'inline';
+        } else {
+            badge.style.display = 'none';
+        }
+    } catch (error) {
+        console.error('Ошибка загрузки заявок:', error);
+    }
+}
+
+// Отрисовка заявок
+function renderRequests(requests) {
+    const modalBody = document.querySelector('#requestsModal .modal-body');
+
+    if (requests.length === 0) {
+        modalBody.innerHTML = `
+            <div class="empty-state">
+                <p>Нет новых заявок</p>
+            </div>
+        `;
+        return;
+    }
+
+    modalBody.innerHTML = requests.map(request => {
+        const initials = request.userInfo.fullName
+            ? request.userInfo.fullName.split(' ').map(w => w[0]).join('').toUpperCase().substring(0, 2)
+            : '?';
+
+        return `
+            <div class="request-item">
+                <div class="request-info">
+                    <div class="member-avatar">${initials}</div>
+                    <div>
+                        <h4 style="margin: 0 0 5px 0;">${request.userInfo.fullName || 'Без имени'}</h4>
+                        <p style="margin: 0; color: #666; font-size: 0.9rem;">${request.userInfo.email}</p>
+                    </div>
+                </div>
+                <div class="request-actions">
+                    <button class="btn-accept" onclick="acceptRequest('${request.id}', '${request.userId}')">Принять</button>
+                    <button class="btn-reject" onclick="rejectRequest('${request.id}')">Отклонить</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Принять заявку
+window.acceptRequest = async function (requestId, userId) {
+    try {
+        // Добавляем пользователя в участники
+        await setDoc(doc(db, 'groups', groupId, 'members', userId), {
+            role: 'member',
+            joinedAt: new Date().toISOString(),
+            userId: userId
+        });
+
+        // Удаляем заявку
+        await deleteDoc(doc(db, 'groups', groupId, 'requests', requestId));
+
+        toast('Заявка принята');
+        loadRequests();
+        loadMembers();
+    } catch (error) {
+        console.error('Ошибка принятия заявки:', error);
+        toast('Ошибка принятия заявки', 'error');
+    }
 };
+
+// Отклонить заявку
+window.rejectRequest = async function (requestId) {
+    try {
+        await deleteDoc(doc(db, 'groups', groupId, 'requests', requestId));
+        toast('Заявка отклонена');
+        loadRequests();
+    } catch (error) {
+        console.error('Ошибка отклонения заявки:', error);
+        toast('Ошибка отклонения заявки', 'error');
+    }
+};
+
+// Обработчики модальных окон
+if (document.getElementById('requestsBtn')) {
+    document.getElementById('requestsBtn').onclick = async () => {
+        // Проверка роли
+        if (currentUserRole === 'user') {
+            toast('Доступ запрещён', 'error');
+            return;
+        }
+        document.getElementById('requestsModal').classList.add('active');
+        await loadRequests();
+    };
+}
+
+if (document.getElementById('membersBtn')) {
+    document.getElementById('membersBtn').onclick = async () => {
+        // Проверка роли
+        if (currentUserRole === 'user') {
+            toast('Доступ запрещён', 'error');
+            return;
+        }
+        document.getElementById('membersModal').classList.add('active');
+        await loadMembers();
+    };
+}
 
 // ========== НАСТРОЙКИ ГРУППЫ ==========
 
 // Открытие модального окна настроек
-$('settingsBtn').onclick = () => {
-    if (!currentGroup) return;
+if ($('settingsBtn')) {
+    $('settingsBtn').onclick = () => {
+        if (!currentGroup) return;
 
-    // Заполняем данные
-    $('groupIdDisplay').textContent = groupId;
-    $('groupCodeDisplay').textContent = currentGroup.code || 'Нет кода';
+        // Заполняем данные
+        $('groupIdDisplay').textContent = groupId;
+        $('groupCodeDisplay').textContent = currentGroup.code || 'Нет кода';
 
-    $('settingsModal').classList.add('active');
-};
+        $('settingsModal').classList.add('active');
+    };
+}
 
 // Копирование ID группы
 window.copyGroupId = async function () {
@@ -453,10 +706,42 @@ onAuthStateChanged(auth, async (user) => {
 
     currentUser = user;
 
+    // Получаем роль пользователя
+    try {
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+            currentUserRole = userDoc.data().role || 'user';
+            // Сохраняем роль в localStorage
+            localStorage.setItem('userRole', currentUserRole);
+        }
+    } catch (error) {
+        console.error('Ошибка получения роли:', error);
+    }
+
+    // Скрываем кнопки для обычных пользователей
+    if (currentUserRole === 'user') {
+        // Скрываем кнопки "Заявки" и "Участники"
+        const requestsBtn = document.getElementById('requestsBtn');
+        const membersBtn = document.getElementById('membersBtn');
+
+        if (requestsBtn) requestsBtn.style.display = 'none';
+        if (membersBtn) membersBtn.style.display = 'none';
+
+        // Скрываем кнопки добавления
+        const addControls = document.querySelector('.add-controls');
+        if (addControls) addControls.style.display = 'none';
+    }
+
     const ok = await loadGroup();
     if (!ok) return;
 
     await loadTabs();
+
+    // Загружаем заявки и участников только для преподавателей
+    if (currentUserRole === 'teacher' || currentUserRole === 'admin') {
+        await loadRequests();
+        await loadMembers();
+    }
 });
 
 console.log('Excel редактор загружен');

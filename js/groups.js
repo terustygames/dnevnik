@@ -136,7 +136,9 @@ function renderGroups(groups) {
                     <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                 </svg>
                 <h3>У вас пока нет групп</h3>
-                <p>Создайте новую группу или войдите в существующую по коду</p>
+                <p>${currentUserRole === 'teacher' || currentUserRole === 'admin' ?
+                'Создайте новую группу или войдите в существующую по коду' :
+                'Войдите в группу по коду приглашения'}</p>
             </div>
         `;
         return;
@@ -331,6 +333,10 @@ notificationBtn.addEventListener('click', () => {
 
 // Модальные окна
 createGroupBtn.addEventListener('click', () => {
+    if (currentUserRole === 'user') {
+        showToast('Только преподаватели могут создавать группы', 'error');
+        return;
+    }
     groupCodeInput.value = generateGroupCode();
     openModal(createModal);
 });
@@ -364,9 +370,14 @@ onAuthStateChanged(auth, async (user) => {
         currentUser = user;
 
         // Получаем роль пользователя
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        if (userDoc.exists()) {
-            currentUserRole = userDoc.data().role || 'user';
+        try {
+            const userDoc = await getDoc(doc(db, 'users', user.uid));
+            if (userDoc.exists()) {
+                currentUserRole = userDoc.data().role || 'user';
+                localStorage.setItem('userRole', currentUserRole);
+            }
+        } catch (error) {
+            console.error('Ошибка получения роли:', error);
         }
 
         // Скрываем кнопку создания группы для обычных пользователей

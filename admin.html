@@ -116,19 +116,6 @@
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon requests">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                    </div>
-                    <div class="stat-info">
-                        <span class="stat-value" id="pendingRequests">0</span>
-                        <span class="stat-label">Заявок</span>
-                    </div>
-                </div>
-
-                <div class="stat-card">
                     <div class="stat-icon groups">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
@@ -143,41 +130,17 @@
                 </div>
             </div>
 
-            <!-- Вкладки -->
-            <div class="admin-tabs">
-                <button class="admin-tab active" data-tab="requests">
-                    Заявки на роль
-                    <span class="tab-badge" id="requestsBadge">0</span>
-                </button>
-                <button class="admin-tab" data-tab="users">Все пользователи</button>
-            </div>
-
-            <!-- Контент вкладок -->
+            <!-- Управление пользователями -->
             <div class="admin-content">
-                <!-- Заявки -->
-                <div class="tab-content active" id="requestsTab">
-                    <div class="content-header">
-                        <h3>Заявки на роль преподавателя</h3>
-                    </div>
-                    <div class="requests-list" id="requestsList">
-                        <div class="empty-state">
-                            <p>Загрузка...</p>
-                        </div>
+                <div class="content-header">
+                    <h3>Управление пользователями</h3>
+                    <div class="search-box">
+                        <input type="text" id="userSearch" placeholder="Поиск по email или имени...">
                     </div>
                 </div>
-
-                <!-- Пользователи -->
-                <div class="tab-content" id="usersTab">
-                    <div class="content-header">
-                        <h3>Все пользователи</h3>
-                        <div class="search-box">
-                            <input type="text" id="userSearch" placeholder="Поиск по email или имени...">
-                        </div>
-                    </div>
-                    <div class="users-list" id="usersList">
-                        <div class="empty-state">
-                            <p>Загрузка...</p>
-                        </div>
+                <div class="users-list" id="usersList">
+                    <div class="empty-state">
+                        <p>Загрузка...</p>
                     </div>
                 </div>
             </div>
