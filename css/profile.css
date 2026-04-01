@@ -1,95 +1,88 @@
 .profile-header {
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 28px;
     margin-bottom: 40px;
-    padding-bottom: 30px;
-    border-bottom: 1px solid #eee;
+    padding-bottom: 32px;
+    border-bottom: 2px solid #F3F4F6;
 }
 
 .profile-avatar {
     position: relative;
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
 }
 
 .avatar-placeholder {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    width: 110px;
+    height: 110px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #5B7FFF 0%, #FF6B8A 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 48px;
-    font-weight: bold;
+    font-size: 40px;
+    font-weight: 700;
     color: white;
-}
-
-.avatar-upload {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #4a76a8;
-    border: 3px solid white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.avatar-upload:hover {
-    background-color: #3a5f88;
-}
-
-.avatar-upload svg {
-    width: 20px;
-    height: 20px;
-    color: white;
+    box-shadow: 0 8px 24px rgba(91, 127, 255, 0.3);
 }
 
 .profile-info h2 {
-    font-size: 1.8rem;
-    margin-bottom: 8px;
-    color: #333;
+    font-size: 1.7rem;
+    margin-bottom: 6px;
+    color: #1A1D2E;
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
 .profile-info p {
-    color: #666;
-    margin-bottom: 5px;
+    color: #6B7280;
+    margin-bottom: 8px;
 }
 
 .profile-role {
     display: inline-block;
-    background-color: #e8f0fe;
-    color: #4a76a8;
-    padding: 5px 15px;
+    padding: 6px 16px;
     border-radius: 20px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 600;
+    margin-top: 4px;
+}
+
+.role-user {
+    background: #F3F4F6;
+    color: #6B7280;
+}
+
+.role-teacher {
+    background: #EEF2FF;
+    color: #5B7FFF;
+}
+
+.role-admin {
+    background: #FEF2F2;
+    color: #EF4444;
 }
 
 .profile-section {
-    margin-bottom: 40px;
+    margin-bottom: 36px;
 }
 
 .profile-section h3 {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     margin-bottom: 20px;
-    color: #333;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #f0f2f5;
+    color: #1A1D2E;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #F3F4F6;
+    font-weight: 700;
+    letter-spacing: -0.3px;
 }
 
 .profile-form {
     background: white;
-    border-radius: 8px;
-    padding: 30px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 16px;
+    padding: 28px;
+    border: 1px solid #E5E7EB;
 }
 
 .form-row {
@@ -106,109 +99,103 @@
 
 .form-group label {
     margin-bottom: 8px;
-    font-weight: 500;
-    color: #555;
+    font-weight: 600;
+    color: #374151;
     font-size: 0.9rem;
 }
 
 .form-group input {
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    padding: 12px 14px;
+    border: 2px solid #E5E7EB;
+    border-radius: 10px;
     font-size: 1rem;
-    transition: border-color 0.3s ease;
+    transition: all 0.3s ease;
+    background: #F9FAFB;
 }
 
 .form-group input:focus {
     outline: none;
-    border-color: #4a76a8;
+    border-color: #5B7FFF;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(91, 127, 255, 0.1);
 }
 
 .form-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 15px;
-    margin-top: 30px;
+    gap: 12px;
+    margin-top: 28px;
     padding-top: 20px;
-    border-top: 1px solid #eee;
-}
-
-.btn {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-primary {
-    background-color: #4a76a8;
-    color: white;
-}
-
-.btn-primary:hover {
-    background-color: #3a5f88;
-}
-
-.btn-secondary {
-    background-color: #f0f2f5;
-    color: #666;
-}
-
-.btn-secondary:hover {
-    background-color: #e0e2e5;
+    border-top: 1px solid #F3F4F6;
 }
 
 .security-options {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
 }
 
 .security-btn {
     display: flex;
     align-items: center;
-    gap: 15px;
-    padding: 15px 20px;
+    gap: 16px;
+    padding: 16px 20px;
     background: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    border: 2px solid #E5E7EB;
+    border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: left;
 }
 
 .security-btn:hover {
-    background-color: #f9f9f9;
-    border-color: #4a76a8;
+    border-color: #5B7FFF;
+    background: #EEF2FF;
+    transform: translateX(4px);
 }
 
 .security-btn svg {
-    width: 24px;
-    height: 24px;
-    color: #666;
+    width: 22px;
+    height: 22px;
+    color: #6B7280;
 }
 
 .security-btn span {
     flex: 1;
     font-size: 1rem;
-    color: #333;
+    color: #1A1D2E;
+    font-weight: 500;
 }
 
 .logout-btn {
-    border-color: #ffe6e6;
-    background-color: #fff5f5;
+    border-color: #FEE2E2;
+    background: #FEF2F2;
 }
 
 .logout-btn:hover {
-    border-color: #e74c3c;
-    background-color: #ffe6e6;
+    border-color: #EF4444;
+    background: #FEE2E2;
+    transform: translateX(4px);
 }
 
 .logout-btn svg {
-    color: #e74c3c;
+    color: #EF4444;
+}
+
+/* Toast */
+.toast {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    padding: 14px 24px;
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 @media (max-width: 768px) {
@@ -229,150 +216,4 @@
     .btn {
         width: 100%;
     }
-}
-
-/* Toast уведомления */
-.toast {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: #27ae60;
-    color: white;
-    padding: 15px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    z-index: 1000;
-    opacity: 0;
-    transform: translateX(100%);
-    transition: all 0.3s ease;
-    max-width: 300px;
-    font-weight: 500;
-}
-
-.toast.error {
-    background: #e74c3c;
-}
-
-.toast.warning {
-    background: #f39c12;
-}
-
-/* Модальные окна */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2000;
-}
-
-.modal-content {
-    background: white;
-    padding: 30px;
-    border-radius: 8px;
-    max-width: 400px;
-    width: 90%;
-    text-align: center;
-}
-
-.modal-actions {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.modal-btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    min-width: 100px;
-}
-
-.modal-btn-cancel {
-    background: #f0f2f5;
-    color: #666;
-}
-
-.modal-btn-confirm {
-    background: #4a76a8;
-    color: white;
-}
-
-.modal-btn-danger {
-    background: #e74c3c;
-    color: white;
-}
-
-/* Добавить в конец css/profile.css */
-
-/* Роли */
-.profile-role {
-    display: inline-block;
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-top: 10px;
-}
-
-.role-user {
-    background-color: #f0f2f5;
-    color: #666;
-}
-
-.role-teacher {
-    background-color: #e8f0fe;
-    color: #4a76a8;
-}
-
-.role-admin {
-    background-color: #fce8e8;
-    color: #c0392b;
-}
-
-/* Секция запроса роли */
-.role-request-section {
-    margin-bottom: 30px;
-}
-
-.role-request-card {
-    background: #f8f9fa;
-    border-radius: 12px;
-    padding: 25px;
-    border-left: 4px solid #4a76a8;
-}
-
-.role-request-card p {
-    color: #666;
-    margin-bottom: 20px;
-    line-height: 1.6;
-}
-
-.request-pending,
-.request-rejected {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    font-weight: 500;
-}
-
-.request-pending {
-    background: #fff3cd;
-    color: #856404;
-}
-
-.request-rejected {
-    background: #f8d7da;
-    color: #721c24;
 }

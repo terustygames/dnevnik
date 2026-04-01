@@ -1,18 +1,20 @@
-/* Заголовок страницы групп */
+/* Заголовок */
 .groups-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 32px;
     padding-bottom: 20px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 2px solid #F3F4F6;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 16px;
 }
 
 .groups-header h2 {
     font-size: 1.5rem;
-    color: #333;
+    color: #1A1D2E;
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
 .groups-actions {
@@ -29,64 +31,85 @@
 
 .group-card {
     background: white;
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-    border: 2px solid #f0f2f5;
-    transition: all 0.3s ease;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    border: 2px solid #F3F4F6;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.group-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #5B7FFF, #00D4AA);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .group-card:hover {
-    border-color: #4a76a8;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+    border-color: #5B7FFF;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(91, 127, 255, 0.15);
+}
+
+.group-card:hover::before {
+    opacity: 1;
 }
 
 .group-card-header {
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 15px;
+    gap: 16px;
+    margin-bottom: 16px;
 }
 
 .group-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 12px;
-    background-color: #4a76a8;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #5B7FFF 0%, #4A6AE5 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-size: 1.3rem;
+    font-weight: 700;
     color: white;
+    box-shadow: 0 4px 12px rgba(91, 127, 255, 0.3);
 }
 
 .group-card-info h3 {
-    font-size: 1.2rem;
-    color: #333;
-    margin-bottom: 5px;
+    font-size: 1.15rem;
+    color: #1A1D2E;
+    margin-bottom: 4px;
+    font-weight: 600;
 }
 
 .group-card-info p {
-    font-size: 0.9rem;
-    color: #666;
+    font-size: 0.85rem;
+    color: #9CA3AF;
 }
 
 .group-card-stats {
     display: flex;
     gap: 20px;
-    padding-top: 15px;
-    border-top: 1px solid #eee;
+    padding-top: 16px;
+    border-top: 1px solid #F3F4F6;
 }
 
 .stat-item {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 0.9rem;
-    color: #666;
+    font-size: 0.85rem;
+    color: #6B7280;
+    font-weight: 500;
 }
 
 .stat-item svg {
@@ -98,20 +121,21 @@
     grid-column: 1 / -1;
     text-align: center;
     padding: 60px 20px;
-    color: #666;
+    color: #6B7280;
 }
 
 .groups-empty svg {
     width: 80px;
     height: 80px;
-    color: #ddd;
+    color: #D1D5DB;
     margin-bottom: 20px;
 }
 
 .groups-empty h3 {
     font-size: 1.3rem;
     margin-bottom: 10px;
-    color: #333;
+    color: #374151;
+    font-weight: 600;
 }
 
 /* Модальные окна */
@@ -121,7 +145,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -129,6 +154,7 @@
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
+    padding: 20px;
 }
 
 .modal.active {
@@ -138,47 +164,54 @@
 
 .modal-content {
     background: white;
-    border-radius: 12px;
-    width: 90%;
+    border-radius: 20px;
+    width: 100%;
     max-width: 500px;
     max-height: 90vh;
     overflow-y: auto;
-    transform: translateY(-20px);
-    transition: transform 0.3s ease;
+    transform: translateY(-20px) scale(0.96);
+    transition: all 0.3s ease;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
 }
 
 .modal.active .modal-content {
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
 }
 
 .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    border-bottom: 1px solid #eee;
+    padding: 20px 24px;
+    border-bottom: 1px solid #F3F4F6;
 }
 
 .modal-header h3 {
-    font-size: 1.3rem;
-    color: #333;
+    font-size: 1.2rem;
+    color: #1A1D2E;
+    font-weight: 700;
 }
 
 .modal-close {
-    background: none;
+    background: #F3F4F6;
     border: none;
-    font-size: 24px;
+    font-size: 20px;
     cursor: pointer;
-    color: #666;
-    padding: 5px;
+    color: #6B7280;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .modal-close:hover {
-    color: #333;
+    background: #E5E7EB;
 }
 
 .modal form {
-    padding: 20px;
+    padding: 24px;
 }
 
 .modal-actions {
@@ -187,7 +220,7 @@
     justify-content: flex-end;
     margin-top: 20px;
     padding-top: 20px;
-    border-top: 1px solid #eee;
+    border-top: 1px solid #F3F4F6;
 }
 
 /* Форма */
@@ -198,366 +231,69 @@
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    font-weight: 500;
-    color: #555;
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.9rem;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    padding: 12px 14px;
+    border: 2px solid #E5E7EB;
+    border-radius: 10px;
     font-size: 1rem;
-    transition: border-color 0.3s ease;
+    transition: all 0.3s ease;
+    background: #F9FAFB;
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #4a76a8;
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
+    border-color: #5B7FFF;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(91, 127, 255, 0.1);
 }
 
 .error-text {
-    color: #e74c3c;
+    color: #EF4444;
     font-size: 0.85rem;
-    margin-top: 5px;
+    margin-top: 6px;
+    font-weight: 500;
 }
 
 /* Кнопки */
 .btn {
     padding: 12px 24px;
     border: none;
-    border-radius: 6px;
-    font-size: 1rem;
+    border-radius: 12px;
+    font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .btn-primary {
-    background-color: #4a76a8;
+    background: linear-gradient(135deg, #5B7FFF 0%, #4A6AE5 100%);
     color: white;
+    box-shadow: 0 4px 16px rgba(91, 127, 255, 0.3);
 }
 
 .btn-primary:hover {
-    background-color: #3a5f88;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(91, 127, 255, 0.4);
 }
 
 .btn-secondary {
-    background-color: #f0f2f5;
-    color: #666;
+    background: #F3F4F6;
+    color: #6B7280;
 }
 
 .btn-secondary:hover {
-    background-color: #e0e2e5;
-}
-
-.btn-danger {
-    background-color: #e74c3c;
-    color: white;
-}
-
-.btn-danger:hover {
-    background-color: #c0392b;
-}
-
-.btn-small {
-    padding: 8px 16px;
-    font-size: 0.9rem;
-}
-
-/* Страница группы */
-.group-info {
-    background: white;
-    border-radius: 12px;
-    padding: 25px;
-    margin-bottom: 30px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-}
-
-.group-info h2 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-}
-
-.group-info p {
-    color: #666;
-}
-
-/* Табы */
-.group-tabs {
-    display: flex;
-    gap: 5px;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #eee;
-    overflow-x: auto;
-}
-
-.tab-btn {
-    padding: 12px 24px;
-    background: none;
-    border: none;
-    font-size: 1rem;
-    font-weight: 500;
-    color: #666;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -2px;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-}
-
-.tab-btn:hover {
-    color: #4a76a8;
-}
-
-.tab-btn.active {
-    color: #4a76a8;
-    border-bottom-color: #4a76a8;
-}
-
-.tab-panel {
-    display: none;
-}
-
-.tab-panel.active {
-    display: block;
-}
-
-.panel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.panel-header h3 {
-    font-size: 1.2rem;
-    color: #333;
-}
-
-/* Расписание */
-.schedule-day {
-    margin-bottom: 25px;
-}
-
-.schedule-day h4 {
-    font-size: 1.1rem;
-    color: #333;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #eee;
-}
-
-.schedule-item {
-    display: flex;
-    gap: 20px;
-    padding: 15px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    align-items: center;
-}
-
-.schedule-time {
-    font-weight: 600;
-    color: #4a76a8;
-    min-width: 120px;
-}
-
-.schedule-info {
-    flex: 1;
-}
-
-.schedule-info strong {
-    display: block;
-    margin-bottom: 5px;
-    color: #333;
-}
-
-.schedule-info span {
-    font-size: 0.9rem;
-    color: #666;
-}
-
-.schedule-actions {
-    display: flex;
-    gap: 10px;
-}
-
-.schedule-actions button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #666;
-    padding: 5px;
-}
-
-.schedule-actions button:hover {
-    color: #e74c3c;
-}
-
-.schedule-empty,
-.grades-empty,
-.members-empty {
-    text-align: center;
-    padding: 40px;
-    color: #666;
-}
-
-/* Оценки */
-.grades-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.grades-table th {
-    background: #f8f9fa;
-    padding: 15px;
-    text-align: left;
-    font-weight: 600;
-    color: #555;
-}
-
-.grades-table td {
-    padding: 15px;
-    border-bottom: 1px solid #eee;
-}
-
-.grade-badge {
-    display: inline-block;
-    width: 30px;
-    height: 30px;
-    line-height: 30px;
-    text-align: center;
-    border-radius: 50%;
-    font-weight: bold;
-    color: white;
-}
-
-.grade-5 {
-    background-color: #27ae60;
-}
-
-.grade-4 {
-    background-color: #3498db;
-}
-
-.grade-3 {
-    background-color: #f39c12;
-}
-
-.grade-2 {
-    background-color: #e74c3c;
-}
-
-/* Участники */
-.member-item {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 15px;
-    border-bottom: 1px solid #eee;
-}
-
-.member-avatar {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    background: #4a76a8;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-}
-
-.member-info {
-    flex: 1;
-}
-
-.member-info strong {
-    display: block;
-    color: #333;
-    margin-bottom: 3px;
-}
-
-.member-info span {
-    font-size: 0.85rem;
-    color: #666;
-}
-
-.member-role {
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-}
-
-.role-admin {
-    background: #e8f0fe;
-    color: #4a76a8;
-}
-
-.role-member {
-    background: #f0f2f5;
-    color: #666;
-}
-
-/* Настройки */
-.setting-item {
-    padding: 20px;
-    border-bottom: 1px solid #eee;
-}
-
-.setting-item label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: 500;
-    color: #555;
-}
-
-.code-display {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.code-display span {
-    font-family: monospace;
-    font-size: 1.2rem;
-    background: #f8f9fa;
-    padding: 10px 20px;
-    border-radius: 6px;
-    letter-spacing: 2px;
-}
-
-.danger-zone {
-    border-top: 2px solid #e74c3c;
-    margin-top: 30px;
-    padding-top: 20px;
-}
-
-.danger-zone h4 {
-    color: #e74c3c;
-    margin-bottom: 15px;
-}
-
-.danger-zone .btn {
-    margin-right: 10px;
-    margin-bottom: 10px;
+    background: #E5E7EB;
+    color: #1A1D2E;
 }
 
 /* Toast */
@@ -565,14 +301,15 @@
     position: fixed;
     top: 80px;
     right: 20px;
-    padding: 15px 20px;
-    border-radius: 8px;
+    padding: 14px 24px;
+    border-radius: 12px;
     color: white;
-    font-weight: 500;
+    font-weight: 600;
     z-index: 2000;
     opacity: 0;
     transform: translateX(100%);
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .toast.show {
@@ -581,15 +318,69 @@
 }
 
 .toast-success {
-    background: #27ae60;
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
 }
 
 .toast-error {
-    background: #e74c3c;
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
 }
 
 .toast-warning {
-    background: #f39c12;
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+}
+
+/* Кнопка выхода */
+.group-leave-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: rgba(239, 68, 68, 0.08);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.group-leave-btn svg {
+    width: 16px;
+    height: 16px;
+    color: #EF4444;
+}
+
+.group-card:hover .group-leave-btn {
+    opacity: 1;
+}
+
+.group-leave-btn:hover {
+    background: #EF4444;
+}
+
+.group-leave-btn:hover svg {
+    color: white;
+}
+
+.member-role {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.role-admin {
+    background: #EEF2FF;
+    color: #5B7FFF;
+}
+
+.role-member {
+    background: #F3F4F6;
+    color: #6B7280;
 }
 
 /* Адаптивность */
@@ -607,57 +398,19 @@
         flex: 1;
     }
 
-    .form-row {
+    .groups-list {
         grid-template-columns: 1fr;
     }
+}
 
-    .group-tabs {
-        flex-wrap: nowrap;
+@media (max-width: 480px) {
+    .modal {
+        padding: 0;
+        align-items: flex-end;
     }
 
-    .tab-btn {
-        padding: 10px 15px;
-        font-size: 0.9rem;
+    .modal-content {
+        max-width: 100%;
+        border-radius: 20px 20px 0 0;
     }
-}
-
-/* Кнопка выхода на карточке группы */
-.group-card {
-    position: relative;
-}
-
-.group-leave-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: rgba(231, 76, 60, 0.1);
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: all 0.3s ease;
-    z-index: 10;
-}
-
-.group-leave-btn svg {
-    width: 16px;
-    height: 16px;
-    color: #e74c3c;
-}
-
-.group-card:hover .group-leave-btn {
-    opacity: 1;
-}
-
-.group-leave-btn:hover {
-    background: #e74c3c;
-}
-
-.group-leave-btn:hover svg {
-    color: white;
 }
