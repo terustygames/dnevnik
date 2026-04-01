@@ -1,0 +1,372 @@
+/* css/admin.css */
+
+/* Статистика */
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.stat-icon.users {
+    background: #e8f0fe;
+    color: #4a76a8;
+}
+
+.stat-icon.teachers {
+    background: #e8f5e9;
+    color: #27ae60;
+}
+
+.stat-icon.requests {
+    background: #fff3cd;
+    color: #f39c12;
+}
+
+.stat-icon.groups {
+    background: #f3e5f5;
+    color: #9b59b6;
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Вкладки */
+.admin-tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eee;
+}
+
+.admin-tab {
+    padding: 12px 24px;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-tab:hover {
+    color: #4a76a8;
+}
+
+.admin-tab.active {
+    color: #4a76a8;
+    border-bottom-color: #4a76a8;
+}
+
+.tab-badge {
+    background: #e74c3c;
+    color: white;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.tab-badge:empty,
+.tab-badge[data-count="0"] {
+    display: none;
+}
+
+/* Контент */
+.admin-content {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.tab-content {
+    display: none;
+    padding: 25px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.content-header h3 {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.search-box input {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    min-width: 250px;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #4a76a8;
+}
+
+/* Список заявок */
+.requests-list,
+.users-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.request-item,
+.user-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #f39c12;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.user-item {
+    border-left-color: #4a76a8;
+}
+
+.request-info,
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+}
+
+.request-avatar,
+.user-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #4a76a8;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.request-details,
+.user-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.request-details strong,
+.user-details strong {
+    color: #333;
+    font-size: 1rem;
+    margin-bottom: 3px;
+}
+
+.request-details span,
+.user-details span {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.request-date {
+    color: #999;
+    font-size: 0.85rem;
+}
+
+.request-actions,
+.user-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-approve {
+    padding: 8px 16px;
+    background: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-approve:hover {
+    background: #219a52;
+}
+
+.btn-reject {
+    padding: 8px 16px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-reject:hover {
+    background: #c0392b;
+}
+
+/* Роль в списке пользователей */
+.user-role {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.user-role.role-user {
+    background: #f0f2f5;
+    color: #666;
+}
+
+.user-role.role-teacher {
+    background: #e8f0fe;
+    color: #4a76a8;
+}
+
+.user-role.role-admin {
+    background: #fce8e8;
+    color: #c0392b;
+}
+
+/* Селект роли */
+.role-select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    background: white;
+}
+
+.role-select:focus {
+    outline: none;
+    border-color: #4a76a8;
+}
+
+/* Пустое состояние */
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+}
+
+.empty-state svg {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+.empty-state p {
+    font-size: 1rem;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .admin-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .content-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .search-box input {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .request-item,
+    .user-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .request-actions,
+    .user-actions {
+        width: 100%;
+    }
+
+    .request-actions button,
+    .user-actions button,
+    .user-actions select {
+        flex: 1;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-tabs {
+        flex-direction: column;
+    }
+
+    .admin-tab {
+        width: 100%;
+        justify-content: center;
+    }
+}

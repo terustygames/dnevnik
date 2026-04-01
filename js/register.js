@@ -1,5 +1,3 @@
-// js/register.js
-
 import { auth, db } from './firebase-config.js';
 import { createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
@@ -47,7 +45,7 @@ registerForm.addEventListener('submit', async (e) => {
         await setDoc(doc(db, 'users', user.uid), {
             fullName: fullName,
             email: email,
-            role: 'user', // Роль по умолчанию
+            role: 'user',
             createdAt: new Date().toISOString()
         });
 

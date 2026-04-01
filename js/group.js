@@ -354,6 +354,96 @@ $('exportBtn').onclick = () => {
     toast('Файл скачан');
 };
 
+// ========== НАСТРОЙКИ ГРУППЫ ==========
+
+// Открытие модального окна настроек
+$('settingsBtn').onclick = () => {
+    if (!currentGroup) return;
+
+    // Заполняем данные
+    $('groupIdDisplay').textContent = groupId;
+    $('groupCodeDisplay').textContent = currentGroup.code || 'Нет кода';
+
+    $('settingsModal').classList.add('active');
+};
+
+// Копирование ID группы
+window.copyGroupId = async function () {
+    try {
+        await navigator.clipboard.writeText(groupId);
+        toast('ID группы скопирован');
+    } catch (e) {
+        // Fallback для старых браузеров
+        const input = document.createElement('input');
+        input.value = groupId;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        toast('ID группы скопирован');
+    }
+};
+
+// Копирование кода группы
+window.copyGroupCode = async function () {
+    const code = currentGroup.code;
+    if (!code) {
+        toast('У группы нет кода доступа', 'error');
+        return;
+    }
+
+    try {
+        await navigator.clipboard.writeText(code);
+        toast('Код группы скопирован');
+    } catch (e) {
+        // Fallback
+        const input = document.createElement('input');
+        input.value = code;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        toast('Код группы скопирован');
+    }
+};
+
+// Выход из группы
+window.leaveGroup = async function () {
+    if (!confirm('Вы уверены, что хотите покинуть группу? Все ваши данные будут удалены.')) {
+        return;
+    }
+
+    try {
+        // Удаляем пользователя из members
+        await deleteDoc(doc(db, 'groups', groupId, 'members', currentUser.uid));
+
+        toast('Вы покинули группу');
+
+        // Перенаправляем на страницу групп
+        setTimeout(() => {
+            window.location.href = 'groups.html';
+        }, 1000);
+
+    } catch (error) {
+        console.error('Ошибка при выходе из группы:', error);
+        toast('Ошибка при выходе из группы', 'error');
+    }
+};
+
+// Закрытие модальных окон
+window.closeModal = function (modalId) {
+    document.getElementById(modalId).classList.remove('active');
+};
+
+// Закрытие модальных окон при клике вне
+document.querySelectorAll('.modal').forEach(modal => {
+    modal.addEventListener('click', function (e) {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+        }
+    });
+});
+
 // ========== ИНИЦИАЛИЗАЦИЯ ==========
 onAuthStateChanged(auth, async (user) => {
     if (!user) {

@@ -620,3 +620,44 @@
         font-size: 0.9rem;
     }
 }
+
+/* Кнопка выхода на карточке группы */
+.group-card {
+    position: relative;
+}
+
+.group-leave-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(231, 76, 60, 0.1);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.group-leave-btn svg {
+    width: 16px;
+    height: 16px;
+    color: #e74c3c;
+}
+
+.group-card:hover .group-leave-btn {
+    opacity: 1;
+}
+
+.group-leave-btn:hover {
+    background: #e74c3c;
+}
+
+.group-leave-btn:hover svg {
+    color: white;
+}

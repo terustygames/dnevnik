@@ -1,6 +1,6 @@
 import { auth, db } from './firebase-config.js';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { collection, addDoc, getDocs, query, where, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { collection, addDoc, getDocs, query, where, doc, getDoc, setDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 // Элементы DOM
 const menuBtn = document.getElementById('menuBtn');
@@ -26,6 +26,7 @@ const groupCodeInput = document.getElementById('groupCode');
 const joinError = document.getElementById('joinError');
 
 let currentUser = null;
+let currentUserRole = 'user';
 
 // Функции сайдбара
 function openSidebar() {
@@ -164,21 +165,68 @@ function renderGroups(groups) {
                     </span>
                 </div>
             </div>
+            <button class="group-leave-btn" data-id="${group.id}" title="Выйти из группы">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+            </button>
         </div>
     `).join('');
 
     // Обработчики клика на карточки
     document.querySelectorAll('.group-card').forEach(card => {
-        card.addEventListener('click', () => {
+        card.addEventListener('click', (e) => {
+            // Игнорируем клик на кнопке выхода
+            if (e.target.closest('.group-leave-btn')) {
+                return;
+            }
             const groupId = card.dataset.id;
             window.location.href = `group.html?id=${groupId}`;
         });
     });
+
+    // Обработчики кнопок выхода
+    document.querySelectorAll('.group-leave-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const groupId = btn.dataset.id;
+            await leaveGroupFromList(groupId);
+        });
+    });
+}
+
+// Функция выхода из группы со списка
+async function leaveGroupFromList(groupId) {
+    if (!confirm('Вы уверены, что хотите покинуть группу?')) {
+        return;
+    }
+
+    try {
+        // Удаляем пользователя из members
+        await deleteDoc(doc(db, 'groups', groupId, 'members', currentUser.uid));
+
+        showToast('Вы покинули группу');
+
+        // Перезагружаем список групп
+        loadUserGroups();
+
+    } catch (error) {
+        console.error('Ошибка при выходе из группы:', error);
+        showToast('Ошибка при выходе из группы', 'error');
+    }
 }
 
 // Создание группы
 async function createGroup(e) {
     e.preventDefault();
+
+    // Проверка роли
+    if (currentUserRole === 'user') {
+        showToast('Только преподаватели могут создавать группы', 'error');
+        return;
+    }
 
     const name = document.getElementById('groupName').value.trim();
     const description = document.getElementById('groupDescription').value.trim();
@@ -309,11 +357,23 @@ joinModal.addEventListener('click', (e) => {
 });
 
 // Проверка авторизации
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
     if (!user) {
         window.location.href = 'login.html';
     } else {
         currentUser = user;
+
+        // Получаем роль пользователя
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+            currentUserRole = userDoc.data().role || 'user';
+        }
+
+        // Скрываем кнопку создания группы для обычных пользователей
+        if (currentUserRole === 'user') {
+            createGroupBtn.style.display = 'none';
+        }
+
         loadUserGroups();
     }
 });

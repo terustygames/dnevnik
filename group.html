@@ -73,6 +73,18 @@
             background: rgba(255, 255, 255, 0.3);
         }
 
+        .btn-icon-only {
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-icon-only svg {
+            width: 18px;
+            height: 18px;
+        }
+
         .badge {
             position: absolute;
             top: -5px;
@@ -470,6 +482,12 @@
             align-items: center;
         }
 
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.3rem;
+            color: #333;
+        }
+
         .modal-body {
             padding: 20px;
         }
@@ -480,6 +498,10 @@
             font-size: 24px;
             cursor: pointer;
             color: #999;
+        }
+
+        .close-modal:hover {
+            color: #333;
         }
 
         /* Запросы на вступление */
@@ -605,6 +627,92 @@
         .schedule-table tr:hover .btn-remove-row {
             opacity: 1;
         }
+
+        /* Модальное окно настроек */
+        .settings-group {
+            margin-bottom: 25px;
+        }
+
+        .settings-group h4 {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .settings-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .settings-item svg {
+            width: 20px;
+            height: 20px;
+            color: #666;
+        }
+
+        .settings-item-info {
+            flex: 1;
+        }
+
+        .settings-item-info label {
+            display: block;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .settings-item-info .value {
+            color: #666;
+            font-size: 0.9rem;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            padding: 8px 16px;
+            background: #4a76a8;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: #3a5f88;
+        }
+
+        .danger-zone {
+            border-top: 2px solid #e74c3c;
+            padding-top: 20px;
+            margin-top: 30px;
+        }
+
+        .danger-zone h4 {
+            color: #e74c3c;
+            margin-bottom: 15px;
+        }
+
+        .btn-danger {
+            padding: 12px 24px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
     </style>
 </head>
 
@@ -614,7 +722,7 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h2>Меню</h2>
-            <button class="close-btn" id="closeBtn">✕</button>
+            <button class="close-btn" id="closeBtn">×</button>
         </div>
         <nav class="sidebar-nav">
             <a href="index.html" class="nav-item">
@@ -686,6 +794,14 @@
                     <span class="badge" id="requestsBadge" style="display:none;">0</span>
                 </button>
                 <button class="btn-manage" id="membersBtn">Участники</button>
+                <button class="btn-manage btn-icon-only" id="settingsBtn" title="Настройки группы">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                        </path>
+                    </svg>
+                </button>
             </div>
         </div>
 
@@ -718,7 +834,7 @@
                 <div class="add-controls">
                     <button class="add-btn" onclick="addRows()">+ Добавить строки</button>
                     <button class="add-btn" onclick="addColumns()">+ Добавить столбцы</button>
-                    <button class="add-btn import-btn" onclick="importExcel()">📥 Импорт Excel</button>
+                    <button class="add-btn import-btn" onclick="importExcel()">Импорт Excel</button>
                 </div>
                 <input type="file" id="excelFileInput" class="file-input-hidden" accept=".xlsx,.xls,.csv">
             </div>
@@ -762,6 +878,50 @@
         </div>
     </div>
 
+    <!-- Модальное окно настроек группы -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Настройки группы</h3>
+                <button class="close-modal" onclick="closeModal('settingsModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-group">
+                    <h4>Информация</h4>
+
+                    <div class="settings-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                        </svg>
+                        <div class="settings-item-info">
+                            <label>ID группы</label>
+                            <span class="value" id="groupIdDisplay"></span>
+                        </div>
+                        <button class="copy-btn" onclick="copyGroupId()">Копировать</button>
+                    </div>
+
+                    <div class="settings-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <div class="settings-item-info">
+                            <label>Код доступа</label>
+                            <span class="value" id="groupCodeDisplay"></span>
+                        </div>
+                        <button class="copy-btn" onclick="copyGroupCode()">Копировать</button>
+                    </div>
+                </div>
+
+                <div class="danger-zone">
+                    <h4>Опасная зона</h4>
+                    <button class="btn-danger" onclick="leaveGroup()">Выйти из группы</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Подключаем SheetJS для работы с Excel -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
@@ -775,7 +935,7 @@
         let currentSheetId = 'sheet-0';
         let sheetCounter = 1;
 
-        // Размеры таблицы по умолчанию
+        // Размер таблицы по умолчанию
         const DEFAULT_ROWS = 50;
         const DEFAULT_COLS = 26;
 
@@ -1277,6 +1437,11 @@
                 document.getElementById('membersModal').classList.add('active');
             });
 
+            // Кнопка настроек
+            document.getElementById('settingsBtn').addEventListener('click', () => {
+                document.getElementById('settingsModal').classList.add('active');
+            });
+
             // Боковое меню
             document.getElementById('menuBtn').addEventListener('click', function () {
                 document.getElementById('sidebar').classList.add('active');
@@ -1374,6 +1539,8 @@
             });
         });
     </script>
+
+    <script type="module" src="js/group.js"></script>
 </body>
 
 </html>

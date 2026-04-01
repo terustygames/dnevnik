@@ -1,8 +1,6 @@
-// js/profile.js
-
 import { auth, db } from './firebase-config.js';
 import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { doc, getDoc, updateDoc, addDoc, collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { doc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 // DOM элементы
 const menuBtn = document.getElementById('menuBtn');
@@ -20,13 +18,9 @@ const profileRole = document.getElementById('profileRole');
 const avatarInitials = document.getElementById('avatarInitials');
 const avatarPlaceholder = document.getElementById('avatarPlaceholder');
 const adminNavItem = document.getElementById('adminNavItem');
-const roleRequestSection = document.getElementById('roleRequestSection');
-const roleRequestStatus = document.getElementById('roleRequestStatus');
-const requestTeacherBtn = document.getElementById('requestTeacherBtn');
 
 let originalData = {};
 let currentUser = null;
-let currentUserData = null;
 
 // Сайдбар
 function openSidebar() {
@@ -123,7 +117,6 @@ async function loadProfileData(user) {
         if (userDoc.exists()) {
             const userData = userDoc.data();
             currentUser = user;
-            currentUserData = userData;
 
             // Основная информация
             profileName.textContent = userData.fullName || 'Пользователь';
@@ -143,12 +136,6 @@ async function loadProfileData(user) {
             // Показываем админ-панель для админов
             if (role === 'admin') {
                 adminNavItem.style.display = 'flex';
-            }
-
-            // Показываем секцию запроса роли для обычных пользователей
-            if (role === 'user') {
-                roleRequestSection.style.display = 'block';
-                await checkExistingRequest();
             }
 
             // Заполняем форму
@@ -172,92 +159,6 @@ async function loadProfileData(user) {
     }
 }
 
-// Проверка существующей заявки на роль
-async function checkExistingRequest() {
-    try {
-        const q = query(
-            collection(db, 'roleRequests'),
-            where('userId', '==', currentUser.uid),
-            where('status', '==', 'pending')
-        );
-        const snapshot = await getDocs(q);
-
-        if (!snapshot.empty) {
-            // Заявка уже подана
-            roleRequestStatus.innerHTML = `
-                <div class="request-pending">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
-                    <span>Ваша заявка на рассмотрении</span>
-                </div>
-            `;
-            requestTeacherBtn.style.display = 'none';
-        }
-
-        // Проверяем отклоненные заявки
-        const rejectedQuery = query(
-            collection(db, 'roleRequests'),
-            where('userId', '==', currentUser.uid),
-            where('status', '==', 'rejected')
-        );
-        const rejectedSnapshot = await getDocs(rejectedQuery);
-
-        if (!rejectedSnapshot.empty) {
-            const lastRejected = rejectedSnapshot.docs[0].data();
-            roleRequestStatus.innerHTML = `
-                <div class="request-rejected">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="15" y1="9" x2="9" y2="15"></line>
-                        <line x1="9" y1="9" x2="15" y2="15"></line>
-                    </svg>
-                    <span>Предыдущая заявка была отклонена</span>
-                </div>
-            `;
-        }
-    } catch (error) {
-        console.error('Ошибка проверки заявки:', error);
-    }
-}
-
-// Отправка заявки на роль преподавателя
-async function requestTeacherRole() {
-    requestTeacherBtn.disabled = true;
-    requestTeacherBtn.textContent = 'Отправка...';
-
-    try {
-        await addDoc(collection(db, 'roleRequests'), {
-            userId: currentUser.uid,
-            userEmail: currentUser.email,
-            userName: currentUserData.fullName || 'Без имени',
-            requestedRole: 'teacher',
-            status: 'pending',
-            createdAt: new Date().toISOString()
-        });
-
-        showToast('Заявка успешно отправлена!');
-
-        roleRequestStatus.innerHTML = `
-            <div class="request-pending">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="12 6 12 12 16 14"></polyline>
-                </svg>
-                <span>Ваша заявка на рассмотрении</span>
-            </div>
-        `;
-        requestTeacherBtn.style.display = 'none';
-
-    } catch (error) {
-        console.error('Ошибка отправки заявки:', error);
-        showToast('Ошибка отправки заявки', 'error');
-        requestTeacherBtn.disabled = false;
-        requestTeacherBtn.textContent = 'Подать заявку на роль преподавателя';
-    }
-}
-
 // Обработчики событий
 menuBtn.addEventListener('click', openSidebar);
 closeBtn.addEventListener('click', closeSidebar);
@@ -270,9 +171,6 @@ document.addEventListener('keydown', (e) => {
 profileBtn.addEventListener('click', () => {
     window.location.href = 'profile.html';
 });
-
-// Кнопка запроса роли
-requestTeacherBtn.addEventListener('click', requestTeacherRole);
 
 // Сохранение профиля
 profileForm.addEventListener('submit', async (e) => {
